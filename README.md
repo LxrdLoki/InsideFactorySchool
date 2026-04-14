@@ -57,3 +57,22 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+
+# API
+
+This project uses Hono.js for the backend. 
+
+## How to start the API
+
+Before starting make sure to:
+1. fill in the entries of .env.example and change the name to just .env
+2. generate a prisma client by running:
+```bash
+npx prisma db pull
+npx prisma generate
+```
+After that open another terminal tab and run 
+```bash
+npx tsx server.ts
+```
