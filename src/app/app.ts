@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ApiService } from '../services/api.service';
+// import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-root',
@@ -11,9 +11,14 @@ import { ApiService } from '../services/api.service';
 export class App {
   protected readonly title = signal('InsideFactory');
 
-  constructor(private apiService: ApiService) { }
+  /*
+    Code for testing API service and API functionality,
+    To be edited to fit the actual API endpoints and functionality when they are ready.
+  */
 
-  ngOnInit(): void {
-    this.apiService.getInfo();
-  }
+  // constructor(private apiService: ApiService) { }
+
+  // ngOnInit(): void {
+  //   this.apiService.getInfo();
+  // }
 }
