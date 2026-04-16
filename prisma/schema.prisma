@@ -7,7 +7,14 @@ datasource db {
   provider = "mysql"
 }
 
-model testdata {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(255)
+model InsiderFlow {
+  id        Int     @id @default(autoincrement())
+  ticker    String  @unique
+
+  netValue   Float   @default(0)
+  netShares  Float   @default(0)
+  totalShares Float   @default(0)
+
+  trackingSince DateTime
+  lastUpdated   DateTime
 }

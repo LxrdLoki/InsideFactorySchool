@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio';
-import { getWeekParam } from './weekParamsHelper';
+import { getWeekParam } from '../helpers/weekParamsHelper';
 
 export async function scrapeForexFactory(WeekOffset: number) {
 

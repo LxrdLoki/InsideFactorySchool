@@ -5,6 +5,7 @@ import { serve } from '@hono/node-server'
 import { PrismaClient } from "./prisma/generated/prisma/client.ts"
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { scrapeForexFactory } from './API/scrapers/forexfactory.ts'
+import { scrapeOpenInsider } from "./API/scrapers/openinsider.ts";
 
 
 // const adapter = new PrismaMariaDb({
@@ -29,6 +30,16 @@ app.get('/calendar/:week', async (c) => {
   const weekNumber = Number(c.req.param('week'));
   const data = await scrapeForexFactory(weekNumber);
   // console.log(data)
+  if (data) {
+    return c.json(data)
+  }
+
+  return c.json({ error: "Failed to scrape data" }, 500)
+})
+
+app.get('/insiderTrades', async (c) => {
+  const data = await scrapeOpenInsider();
+
   if (data) {
     return c.json(data)
   }
