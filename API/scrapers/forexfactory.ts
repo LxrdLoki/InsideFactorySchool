@@ -8,7 +8,7 @@ export async function scrapeForexFactory(WeekOffset: number) {
 
   console.log(weekParam)
 
-  const url = WeekOffset === 0 ? 'https://www.forexfactory.com/calendar.php' : `https://www.forexfactory.com/calendar.php?week=${weekParam}`;
+  const url = WeekOffset === 0 ? 'https://www.forexfactory.com/calendar.php' : `https://www.forexfactory.com/calendar?week=${weekParam}`;
 
   console.log(url)
   // forex factory's calendar page doesn't allow CORS request so had to sploof the request headers to make it work
