@@ -1,4 +1,5 @@
 export interface CalendarEvent {
+  date: string;
   time: string;
   currency: string;
   impact: string;
