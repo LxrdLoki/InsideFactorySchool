@@ -1,5 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { CalendarEvent } from "../types/calendar";
+import { Observable } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -12,19 +14,7 @@ export class ApiService {
       });
   }
 
-  public getCalendarData() {
-    let data = null;
-    this.http.get('http://localhost:3000/calendar', { responseType: 'json' })
-      .subscribe(res => {
-        console.log(res, "calendarData");
-        data = res;
-      });
-
-    if (!data) {
-      console.error("No data received from the server");
-      return;
-    }
-
-    return data;
+  public getCalendarData(): Observable<CalendarEvent[]> {
+    return this.http.get<CalendarEvent[]>('http://localhost:3000/calendar');
   }
 }
