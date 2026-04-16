@@ -11,13 +11,21 @@ import { CommonModule } from '@angular/common';
 })
 export class Dashboard implements OnInit {
   public calendarData = signal<CalendarEvent[] | undefined>(undefined);
+  public weekToGet = 0;
 
   constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
-    this.apiService.getCalendarData(0).subscribe((data) => {
+    this.apiService.getCalendarData(this.weekToGet).subscribe((data) => {
       this.calendarData.set(data);
       console.log(data);
+    });
+  }
+
+  public arrowClick(value: "previous" | "next") {
+    value === "previous" ? this.weekToGet-- : this.weekToGet++;
+    this.apiService.getCalendarData(this.weekToGet).subscribe((data) => {
+      this.calendarData.set(data);
     });
   }
 }

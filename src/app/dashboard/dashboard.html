@@ -3,6 +3,11 @@
   <table class="calendar-table">
     <thead>
       <tr>
+        <button (click)="arrowClick('previous')"><-</button>
+        <span>this week</span>
+        <button (click)="arrowClick('next')">-></button>
+      </tr>
+      <tr>
         <th>Date</th>
         <th>Time</th>
         <th>Currency</th>
