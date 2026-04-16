@@ -1,3 +1,34 @@
 <section>
-  <p> dashboard logic goes here! </p>
+
+  <table class="calendar-table">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Currency</th>
+        <th>Impact</th>
+        <th>Event</th>
+        <th>Actual</th>
+        <th>Forecast</th>
+        <th>Previous</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (item of calendarData(); track $index) {
+        <tr>
+          <td>{{ item.time }}</td>
+          <td>{{ item.currency }}</td>
+          <td>{{ item.impact }}</td>
+          <td>{{ item.event }}</td>
+          <td>{{ item.actual }}</td>
+          <td>{{ item.forecast }}</td>
+          <td>{{ item.previous }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if (!calendarData()) {
+    <p>Loading...</p>
+  }
 </section>

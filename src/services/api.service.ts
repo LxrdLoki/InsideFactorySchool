@@ -7,12 +7,12 @@ import { Observable } from "rxjs";
 export class ApiService {
   constructor(private http: HttpClient) { }
 
-  public getInfo() {
-    this.http.get('http://localhost:3000/', { responseType: 'text' })
-      .subscribe(res => {
-        console.log(res), "moi";
-      });
-  }
+  // public getInfo() {
+  //   this.http.get('http://localhost:3000/', { responseType: 'text' })
+  //     .subscribe(res => {
+  //       console.log(res);
+  //     });
+  // }
 
   public getCalendarData(): Observable<CalendarEvent[]> {
     return this.http.get<CalendarEvent[]>('http://localhost:3000/calendar');
