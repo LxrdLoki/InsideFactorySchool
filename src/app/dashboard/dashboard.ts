@@ -15,7 +15,7 @@ export class Dashboard implements OnInit {
   constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
-    this.apiService.getCalendarData().subscribe((data) => {
+    this.apiService.getCalendarData(4).subscribe((data) => {
       this.calendarData.set(data);
       console.log(data);
     });

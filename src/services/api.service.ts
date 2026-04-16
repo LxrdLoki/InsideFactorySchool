@@ -14,7 +14,7 @@ export class ApiService {
   //     });
   // }
 
-  public getCalendarData(): Observable<CalendarEvent[]> {
-    return this.http.get<CalendarEvent[]>('http://localhost:3000/calendar');
+  public getCalendarData(week: number): Observable<CalendarEvent[]> {
+    return this.http.get<CalendarEvent[]>(`http://localhost:3000/calendar/${week}`);
   }
 }

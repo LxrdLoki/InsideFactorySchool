@@ -25,9 +25,10 @@ app.use('*', cors());
 //   return c.json(lootdropper)
 // })
 
-app.get('/calendar', async (c) => {
-  const data = await scrapeForexFactory()
-  console.log(data)
+app.get('/calendar/:week', async (c) => {
+  const weekNumber = Number(c.req.param('week'));
+  const data = await scrapeForexFactory(weekNumber);
+  // console.log(data)
   if (data) {
     return c.json(data)
   }

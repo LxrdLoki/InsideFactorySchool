@@ -1,16 +1,23 @@
 import * as cheerio from 'cheerio';
+import { getWeekParam } from './weekParamsHelper';
 
-export async function scrapeForexFactory() {
+export async function scrapeForexFactory(WeekOffset: number) {
 
+  // Get the week parameter for the current week (0) or next week (1), etc.
+  const weekParam = getWeekParam(WeekOffset);
+
+  console.log(weekParam)
+
+  const url = WeekOffset === 0 ? 'https://www.forexfactory.com/calendar.php' : `https://www.forexfactory.com/calendar.php?week=${weekParam}`;
+
+  console.log(url)
   // forex factory's calendar page doesn't allow CORS request so had to sploof the request headers to make it work
-  const response = await fetch('https://www.forexfactory.com/calendar.php', {
+  const response = await fetch(url, {
     headers: {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36',
     },
   });
   const html = await response.text();
-
-  console.log(html);
 
   const $ = cheerio.load(html);
 
@@ -59,5 +66,6 @@ export async function scrapeForexFactory() {
     }
   });
 
+  console.log(events)
   return events;
 }
