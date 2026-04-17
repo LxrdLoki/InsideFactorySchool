@@ -13,6 +13,7 @@
   position: fixed;
   min-width: 100vw;
   border-bottom: 10px solid v.$primary-color;
+  z-index: 999;
 
   @media (max-width: 1225px) {
     @include mixins.main-padding(10px);

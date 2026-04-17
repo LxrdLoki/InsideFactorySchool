@@ -1,72 +1,98 @@
 <section>
   <!-- forexfactory Table -->
-  <table class="calendar-table">
-    <thead>
-      <tr>
-        <button (click)="arrowClick('previous')"><-</button>
-        <span>this week</span>
-        <button (click)="arrowClick('next')">-></button>
-      </tr>
-      <tr>
-        <th>Date</th>
-        <th>Time</th>
-        <th>Currency</th>
-        <th>Impact</th>
-        <th>Event</th>
-        <th>Actual</th>
-        <th>Forecast</th>
-        <th>Previous</th>
-      </tr>
-    </thead>
+  <div class="tableWrapper">
+    <table class="calendarTable">
+      <thead class="tableHeader">
+        <tr class="topBar">
+          <th colspan="8">
+            <div class="headerContent">
+              <div class="buttonHolder">
+                <button class="navigateButton" (click)="arrowClick('previous')">←</button>
+                <span>This week</span>
+                <button class="navigateButton" (click)="arrowClick('next')">→</button>
+              </div>
 
-    <tbody>
-      @for (item of calendarData(); track $index) {
-        <tr>
-          <td>{{ item.date }}</td>
-          <td>{{ item.time }}</td>
-          <td>{{ item.currency }}</td>
-          <td>{{ item.impact }}</td>
-          <td>{{ item.event }}</td>
-          <td>{{ item.actual }}</td>
-          <td>{{ item.forecast }}</td>
-          <td>{{ item.previous }}</td>
+              <div class="titleHolder">
+                <h2>Data - calendar</h2>
+              </div>
+            </div>
+          </th>
         </tr>
-      }
-    </tbody>
-  </table>
 
-  @if (!calendarData()) {
-    <p>Loading...</p>
-  }
+        <tr class="columnHeader">
+          <th>Date</th>
+          <th>Time</th>
+          <th>Currency</th>
+          <th>Impact</th>
+          <th>Event</th>
+          <th>Actual</th>
+          <th>Forecast</th>
+          <th>Previous</th>
+        </tr>
+      </thead>
+
+      <tbody class="tableBody">
+        @for (item of calendarData(); track $index) {
+          <tr class="tableRow">
+            <td>{{ item.date }}</td>
+            <td>{{ item.time }}</td>
+            <td>{{ item.currency }}</td>
+            <td>{{ item.impact }}</td>
+            <td>{{ item.event }}</td>
+            <td>{{ item.actual }}</td>
+            <td>{{ item.forecast }}</td>
+            <td>{{ item.previous }}</td>
+          </tr>
+        }
+      </tbody>
+      @if (!calendarData()) {
+        <p>Loading...</p>
+      }
+    </table>
+  </div>
+
 </section>
 
-<section>
+<section class="insiderTrades">
   <!-- openinsider Table -->
-  <table class="openinsider-table">
-    <thead>
-      <tr>
-        <th>Transaction Date</th>
-        <th>Ticker</th>
-        <th>Net Shares</th>
-        <th>Net Value</th>
-        <th>Tracking Since</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      @for (transaction of insiderTransactions(); track $index) {
-        <tr>
-          <td>{{ transaction.transactionDate }}</td>
-          <td>{{ transaction.ticker }}</td>
-          <td>{{ transaction.netShares }}</td>
-          <td>{{ transaction.netValue }}</td>
-          <td>{{ transaction.trackingSince }}</td>
+  <div class="tableWrapper">
+    <table class="openinsiderTable">
+      <thead class="tableHeader">
+        <tr class="topBar">
+          <th class="titleBar" colspan="8">
+            <div class="headerContent">
+              <div class="titleHolder">
+                <h2>Insider transactions</h2>
+              </div>
+            </div>
+          </th>
         </tr>
-      }
-    </tbody>
-  </table>
 
-  @if (!insiderTransactions()) {
-    <p>Loading...</p>
-  }
+        <tr class="columnHeader">
+          <th>Transaction Date</th>
+          <th>Ticker</th>
+          <th>Net Shares</th>
+          <th>Net Value</th>
+          <th>Tracking Since</th>
+        </tr>
+      </thead>
+
+      <tbody class="tableBody">
+        @for (transaction of insiderTransactions(); track $index) {
+          <tr class="tableRow">
+            <td>{{ transaction.transactionDate }}</td>
+            <td>{{ transaction.ticker }}</td>
+            <td>{{ transaction.netShares }}</td>
+            <td>{{ transaction.netValue }}</td>
+            <td>{{ transaction.trackingSince }}</td>
+          </tr>
+        }
+      </tbody>
+
+      @if (!insiderTransactions()) {
+        <p>Loading...</p>
+      }
+    </table>
+  </div>
+
 </section>

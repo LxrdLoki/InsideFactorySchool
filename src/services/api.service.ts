@@ -8,13 +8,6 @@ import { insiderTransaction } from "../types/insideTransactions";
 export class ApiService {
   constructor(private http: HttpClient) { }
 
-  // public getInfo() {
-  //   this.http.get('http://localhost:3000/', { responseType: 'text' })
-  //     .subscribe(res => {
-  //       console.log(res);
-  //     });
-  // }
-
   public getCalendarData(week: number): Observable<CalendarEvent[]> {
     return this.http.get<CalendarEvent[]>(`http://localhost:3000/calendar/${week}`);
   }
