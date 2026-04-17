@@ -18,18 +18,25 @@ export async function scrapeOpenInsider() {
   $('.tinytable tbody tr').each((index, element) => {
     const cols = $(element).find('td');
 
+    const fillingDate = $(cols[1]).text().trim();
     const date = $(cols[2]).text().trim();
     const ticker = $(cols[3]).text().trim();
     const companyName = $(cols[4]).text().trim();
+    const type = $(cols[7]).text().trim();
     const pricePerShare = $(cols[8]).text().trim();
     const shares = $(cols[9]).text().trim();
     const totalOwned = $(cols[10]).text().trim();
     const value = $(cols[12]).text().trim();
 
+    // unique id to avoid duplicates in database
+    const id = `${fillingDate}-${ticker}-${date}-${shares}-${value}`;
+
     events.push({
-      date,
       ticker,
+      date,
+      id,
       companyName,
+      type,
       pricePerShare,
       shares,
       totalOwned,

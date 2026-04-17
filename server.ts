@@ -6,16 +6,17 @@ import { PrismaClient } from "./prisma/generated/prisma/client.ts"
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { scrapeForexFactory } from './API/scrapers/forexfactory.ts'
 import { scrapeOpenInsider } from "./API/scrapers/openinsider.ts";
+import { processTransactions } from "./API/scrapers/processOpenInsider.ts";
 
 
-// const adapter = new PrismaMariaDb({
-//   host: process.env.DATABASE_HOST,
-//   user: process.env.DATABASE_USER,
-//   password: process.env.DATABASE_PASSWORD,
-//   database: process.env.DATABASE_NAME,
-//   connectionLimit: 5,
-// });
-// const prisma = new PrismaClient({ adapter });
+const adapter = new PrismaMariaDb({
+  host: process.env.DATABASE_HOST,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
+  connectionLimit: 5,
+});
+const prisma = new PrismaClient({ adapter });
 
 const app = new Hono()
 app.use('*', cors());
@@ -38,7 +39,7 @@ app.get('/calendar/:week', async (c) => {
 })
 
 app.get('/insiderTrades', async (c) => {
-  const data = await scrapeOpenInsider();
+  const data = await processTransactions(prisma);
 
   if (data) {
     return c.json(data)

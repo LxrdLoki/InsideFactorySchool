@@ -7,13 +7,15 @@ datasource db {
   provider = "mysql"
 }
 
-model InsiderFlow {
+model InsiderTransaction {
   id        Int     @id @default(autoincrement())
   ticker    String  @unique
 
+  transactionDate String
+  lastTransactionId String
+
   netValue   Float   @default(0)
   netShares  Float   @default(0)
-  totalShares Float   @default(0)
 
   trackingSince DateTime
   lastUpdated   DateTime
