@@ -6,11 +6,8 @@ export async function scrapeForexFactory(WeekOffset: number) {
   // Get the week parameter for the current week (0) or next week (1), etc.
   const weekParam = getWeekParam(WeekOffset);
 
-  console.log(weekParam)
-
   const url = WeekOffset === 0 ? 'https://www.forexfactory.com/calendar.php' : `https://www.forexfactory.com/calendar?week=${weekParam}`;
 
-  console.log(url)
   // forex factory's calendar page doesn't allow CORS request so had to sploof the request headers to make it work
   const response = await fetch(url, {
     headers: {
@@ -66,6 +63,5 @@ export async function scrapeForexFactory(WeekOffset: number) {
     }
   });
 
-  console.log(events)
   return events;
 }

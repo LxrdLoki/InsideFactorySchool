@@ -1,5 +1,5 @@
 <section>
-
+  <!-- forexfactory Table -->
   <table class="calendar-table">
     <thead>
       <tr>
@@ -36,6 +36,37 @@
   </table>
 
   @if (!calendarData()) {
+    <p>Loading...</p>
+  }
+</section>
+
+<section>
+  <!-- openinsider Table -->
+  <table class="openinsider-table">
+    <thead>
+      <tr>
+        <th>Transaction Date</th>
+        <th>Ticker</th>
+        <th>Net Shares</th>
+        <th>Net Value</th>
+        <th>Tracking Since</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (transaction of insiderTransactions(); track $index) {
+        <tr>
+          <td>{{ transaction.transactionDate }}</td>
+          <td>{{ transaction.ticker }}</td>
+          <td>{{ transaction.netShares }}</td>
+          <td>{{ transaction.netValue }}</td>
+          <td>{{ transaction.trackingSince }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if (!insiderTransactions()) {
     <p>Loading...</p>
   }
 </section>

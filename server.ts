@@ -30,7 +30,7 @@ app.use('*', cors());
 app.get('/calendar/:week', async (c) => {
   const weekNumber = Number(c.req.param('week'));
   const data = await scrapeForexFactory(weekNumber);
-  // console.log(data)
+
   if (data) {
     return c.json(data)
   }

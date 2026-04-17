@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { CalendarEvent } from '../../types/calendar';
 import { CommonModule } from '@angular/common';
+import { insiderTransaction } from '../../types/insideTransactions';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,6 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class Dashboard implements OnInit {
   public calendarData = signal<CalendarEvent[] | undefined>(undefined);
+  public insiderTransactions = signal<insiderTransaction[] | undefined>(undefined);
   public weekToGet = 0;
 
   constructor(private apiService: ApiService) { }
@@ -20,6 +22,11 @@ export class Dashboard implements OnInit {
       this.calendarData.set(data);
       console.log(data);
     });
+    this.apiService.getInsiderTransactions().subscribe((data) => {
+      this.insiderTransactions.set(data);
+      console.log(data);
+    });
+
   }
 
   public arrowClick(value: "previous" | "next") {
