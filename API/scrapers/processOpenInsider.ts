@@ -1,25 +1,48 @@
 import { parseFloats } from "../helpers/parseFloats";
 import { scrapeOpenInsider } from "./openinsider";
 
+// processes the transactions from open insider and updates the database accordingly
 export async function processTransactions(prisma: any) {
   const transactions = await scrapeOpenInsider();
 
+  // ensure to have olders -> newest when processing
+  transactions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   for (const transaction of transactions) {
+
+    const exists = await prisma.allInsiderTransactions.findUnique({
+      where: { id: transaction.id },
+    });
+
+    if (exists) {
+      console.log(transaction.id, "transaction already exists")
+      continue;
+    }
+
+    await prisma.allInsiderTransactions.create({
+      data: {
+        id: transaction.id,
+        ticker: transaction.ticker,
+        type: transaction.type,
+        shares: parseFloats(transaction.shares),
+        value: parseFloats(transaction.value, true),
+        date: transaction.date,
+      }
+    })
 
     const flow = await prisma.insiderTransaction.findUnique({
       where: { ticker: transaction.ticker },
     });
 
-    console.log("flow -> ", flow)
-
     if (flow?.lastTransactionId === transaction.id) {
-      console.log(flow.lastTransactionId, "update already processed")
-      break;
+      console.log(transaction.id, "transaction already processed")
+      continue;
     }
 
     const netValue = parseFloats(transaction.value, true);
     const netShares = parseFloats(transaction.shares);
 
+    // check if ticker already exists in database,
+    //if so update net value and shares, if not create new entry
     await prisma.insiderTransaction.upsert({
       where: { ticker: transaction.ticker },
 

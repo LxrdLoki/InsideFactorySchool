@@ -20,3 +20,13 @@ model InsiderTransaction {
   trackingSince DateTime
   lastUpdated   DateTime
 }
+
+model allInsiderTransactions{
+  id        String  @id
+  ticker    String
+  type      String
+  shares    Float
+  value     Float
+  date      String
+  createdAt DateTime @default(now())
+}
