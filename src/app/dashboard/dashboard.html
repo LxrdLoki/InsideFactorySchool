@@ -84,7 +84,7 @@
             <td>{{ transaction.ticker }}</td>
             <td>{{ transaction.netShares }}</td>
             <td>{{ transaction.netValue }}</td>
-            <td>{{ transaction.trackingSince }}</td>
+            <td>{{ transaction.trackingSince | date:'dd-MM-yyyy HH:mm' }}</td>
           </tr>
         }
       </tbody>
