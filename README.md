@@ -76,3 +76,13 @@ After that open another terminal tab and run
 ```bash
 npx tsx server.ts
 ```
+
+Security metigations:
+T5 (threat 5) -> Malicious Scraped Data Injection
+
+The application gets data from external websites, this data can be manipulated or contain scripts (for XSS). As mitigation in scrapeDataValidatior.ts (currently for openInsider only since there is database storing present there) we added validation and sanization. Data gets validated before it gets saved in the database.
+
+in scrapeDataValidator.ts:
+isValidTransaction() validates the input
+sanitizeString() removes potential dangerous characters.
+As a result potentional dangerous data does not get saved in the database.

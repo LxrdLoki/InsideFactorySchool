@@ -1,5 +1,6 @@
 import { parseFloats } from "../helpers/parseFloats";
 import { scrapeOpenInsider } from "./openinsider";
+import { sanitizeString, isValidTransaction } from "../helpers/scrapeDataValidator";
 
 // processes the transactions from open insider and updates the database accordingly
 export async function processTransactions(prisma: any) {
@@ -8,6 +9,11 @@ export async function processTransactions(prisma: any) {
   // ensure to have olders -> newest when processing
   transactions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   for (const transaction of transactions) {
+
+    if (!isValidTransaction(transaction)) {
+      console.log(transaction.id, "transaction is not valid (potential XSS attack so skipped)")
+      continue;
+    }
 
     const exists = await prisma.allInsiderTransactions.findUnique({
       where: { id: transaction.id },
@@ -18,10 +24,12 @@ export async function processTransactions(prisma: any) {
       continue;
     }
 
+    const cleanedTicker = sanitizeString(transaction.ticker);
+
     await prisma.allInsiderTransactions.create({
       data: {
         id: transaction.id,
-        ticker: transaction.ticker,
+        ticker: cleanedTicker,
         type: transaction.type,
         shares: parseFloats(transaction.shares),
         value: parseFloats(transaction.value, true),
@@ -54,7 +62,7 @@ export async function processTransactions(prisma: any) {
       },
 
       create: {
-        ticker: transaction.ticker,
+        ticker: cleanedTicker,
         netValue: netValue,
         netShares: netShares,
         transactionDate: transaction.date,

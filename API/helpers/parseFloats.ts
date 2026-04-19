@@ -1,4 +1,4 @@
-export function parseFloats(value: any, isMoney = false): Number {
+export function parseFloats(value: any, isMoney = false): number {
 
   if (!value) {
     return 0;

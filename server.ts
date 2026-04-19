@@ -21,12 +21,6 @@ const prisma = new PrismaClient({ adapter });
 const app = new Hono()
 app.use('*', cors());
 
-// app.get('/', async (c) => {
-
-//   const lootdropper = await prisma.testdata.findMany()
-//   return c.json(lootdropper)
-// })
-
 app.get('/calendar/:week', async (c) => {
   const weekNumber = Number(c.req.param('week'));
   const data = await scrapeForexFactory(weekNumber);
