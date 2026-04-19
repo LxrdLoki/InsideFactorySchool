@@ -1,0 +1,50 @@
+@use "./variables" as v;
+@use "./mixins" as m;
+
+body{
+  position: relative;
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden !important;
+  font-family: sans-serif;
+  background: url(../../public/void.gif) #ccd3d8 repeat 0 0;
+}
+
+// no bootstrap needed 😎
+.container {
+  @include m.main-margin(0px);
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4rem;
+    width: 100%;
+
+    >.tripleCol {
+        flex: 1 1 calc(33.333% - 4rem);
+        max-width: calc(33.333% - 1.333rem);
+        box-sizing: border-box;
+    }
+
+    >.doubleCol {
+        flex: 1 1 calc(50% - 4rem);
+        max-width: calc(50% - 2rem);
+        box-sizing: border-box;
+    }
+
+    @media screen and (max-width: 1000px) {
+        >* {
+            flex: 1 1 100%;
+            max-width: 100%;
+        }
+
+        >.tripleCol,
+        >.doubleCol {
+            flex: 1 1 100%;
+            max-width: 100%;
+        }
+    }
+}

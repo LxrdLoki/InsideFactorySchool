@@ -1,0 +1,41 @@
+@mixin main-margin($vertical: 0px) {
+  margin: $vertical 450px;
+
+  @media screen and (max-width: 2400px) {
+      margin: $vertical 350px;
+  }
+
+  @media screen and (max-width: 1920px) {
+      margin: $vertical 250px;
+  }
+
+
+  @media screen and (max-width: 1360px) {
+    margin: $vertical 100px;
+  }
+
+  @media screen and (max-width: 1180px) {
+    margin: $vertical 25px;
+  }
+}
+
+@mixin main-padding($vertical: 0px) {
+  padding: $vertical 450px;
+
+  @media screen and (max-width: 2400px) {
+      padding: $vertical 350px;
+  }
+
+  @media screen and (max-width: 1920px) {
+      padding: $vertical 250px;
+  }
+
+
+  @media screen and (max-width: 1360px) {
+    padding: $vertical 100px;
+  }
+
+  @media screen and (max-width: 1180px) {
+    padding: $vertical 25px;
+  }
+}

@@ -1,0 +1,101 @@
+@use '../../styling/variables.scss' as v;
+
+.tableWrapper {
+  max-height: 450px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.calendarTable, .openinsiderTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  overflow: hidden;
+
+  .tableHeader {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    .topBar {
+      background: v.$primary-color;
+
+      th {
+        padding: 12px 20px;
+      }
+
+      .headerContent {
+        position: relative;
+        display: flex;
+        align-items: center;
+        color: v.$primary-font-color;
+
+        .titleHolder {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+      }
+
+      .buttonHolder {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .navigateButton {
+          background: v.$secondary-color;
+          border: none;
+          color: white;
+          padding: 6px 12px;
+          cursor: pointer;
+
+          &:hover {
+            background: darken(v.$secondary-color, 5%);
+          }
+        }
+      }
+
+      .titleHolder h2 {
+        margin: 0;
+        font-size: 18px;
+      }
+    }
+
+    .columnHeader {
+      background: v.$secondary-color;
+      color: white;
+
+      th {
+        padding: 10px;
+        font-weight: 500;
+        font-size: 14px;
+        text-align: left;
+      }
+    }
+  }
+
+  .tableBody {
+    .tableRow {
+      border-bottom: 1px solid #e5e7eb;
+
+      &:hover {
+        background: #f9fafb;
+      }
+
+      td {
+        padding: 10px;
+        font-size: 14px;
+        color: v.$primary-font-color;
+      }
+    }
+  }
+}
+
+.insiderTrades{
+  padding-top: 50px;
+
+  .openinsiderTable{
+    .titleBar{
+      padding: 28px 0px !important;
+    }
+  }
+}
