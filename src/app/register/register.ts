@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-register',
@@ -6,4 +7,17 @@ import { Component } from '@angular/core';
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
-export class Register {}
+export class Register {
+  constructor(public apiService: ApiService) { }
+
+  public register(event: Event) {
+    event.preventDefault();
+    const form = event.target as HTMLFormElement;
+    const username = (form.elements[0] as HTMLInputElement).value;
+    const email = (form.elements[1] as HTMLInputElement).value;
+    const password = (form.elements[2] as HTMLInputElement).value;
+
+
+    this.apiService.registerUser(username, email, password);
+  }
+}
