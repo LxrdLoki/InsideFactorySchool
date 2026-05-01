@@ -7,6 +7,7 @@ import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { scrapeForexFactory } from './API/scrapers/forexfactory.ts'
 import { scrapeOpenInsider } from "./API/scrapers/openinsider.ts";
 import { processTransactions } from "./API/scrapers/processOpenInsider.ts";
+import { register } from "./API/authentication/register.ts";
 
 
 const adapter = new PrismaMariaDb({
@@ -41,6 +42,14 @@ app.get('/insiderTrades', async (c) => {
 
   return c.json({ error: "Failed to scrape data" }, 500)
 })
+
+app.post('/register', async (c) => {
+  const body = await c.req.json();
+
+  const user = await register(body, prisma);
+
+  return c.json(user);
+});
 
 serve({
   fetch: app.fetch,

@@ -18,6 +18,10 @@ export class Register {
     const password = (form.elements[2] as HTMLInputElement).value;
 
 
-    this.apiService.registerUser(username, email, password);
+    this.apiService.registerUser(username, email, password).subscribe({
+      next: (response) => {
+        console.log('registerded -> ', response);
+      }
+    });
   }
 }
