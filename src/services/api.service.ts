@@ -17,6 +17,10 @@ export class ApiService {
     return this.http.get<insiderTransaction[]>(`http://localhost:3000/insiderTrades`);
   }
 
+  public loginUser(email: string, password: string): Observable<User> {
+    return this.http.post<User>(`http://localhost:3000/login`, { email, password });
+  }
+
   public registerUser(username: string, email: string, password: string): Observable<User> {
     return this.http.post<User>(`http://localhost:3000/register`, { username, email, password });
   }

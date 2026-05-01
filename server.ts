@@ -8,7 +8,7 @@ import { scrapeForexFactory } from './API/scrapers/forexfactory.ts'
 import { scrapeOpenInsider } from "./API/scrapers/openinsider.ts";
 import { processTransactions } from "./API/scrapers/processOpenInsider.ts";
 import { register } from "./API/authentication/register.ts";
-import passport from "passport";
+import jwt from "jsonwebtoken";
 
 
 const adapter = new PrismaMariaDb({
@@ -54,6 +54,13 @@ app.post('/register', async (c) => {
   }
 
   return c.json(user);
+});
+
+app.post('/login', async (c) => {
+  const body = await c.req.json();
+  const { email, password } = body;
+
+  return c.json({ message: "called correctly" });
 });
 
 serve({
