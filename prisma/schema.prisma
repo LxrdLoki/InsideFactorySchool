@@ -34,7 +34,7 @@ model allInsiderTransactions{
 enum UserRole{
   USER
   ADMIN
-}
+} 
 
 model User {
   id        Int     @id @default(autoincrement())

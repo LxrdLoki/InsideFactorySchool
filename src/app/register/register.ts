@@ -21,6 +21,9 @@ export class Register {
     this.apiService.registerUser(username, email, password).subscribe({
       next: (response) => {
         console.log('registerded -> ', response);
+      },
+      error: (err) => {
+        console.error('Error registering user -> ', err);
       }
     });
   }

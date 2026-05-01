@@ -8,6 +8,7 @@ import { scrapeForexFactory } from './API/scrapers/forexfactory.ts'
 import { scrapeOpenInsider } from "./API/scrapers/openinsider.ts";
 import { processTransactions } from "./API/scrapers/processOpenInsider.ts";
 import { register } from "./API/authentication/register.ts";
+import passport from "passport";
 
 
 const adapter = new PrismaMariaDb({
@@ -47,6 +48,10 @@ app.post('/register', async (c) => {
   const body = await c.req.json();
 
   const user = await register(body, prisma);
+
+  if (typeof user === "string") {
+    return c.json({ error: user }, 400);
+  }
 
   return c.json(user);
 });
