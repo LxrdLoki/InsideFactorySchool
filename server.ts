@@ -5,10 +5,10 @@ import { serve } from '@hono/node-server'
 import { PrismaClient } from "./prisma/generated/prisma/client.ts"
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { scrapeForexFactory } from './API/scrapers/forexfactory.ts'
-import { scrapeOpenInsider } from "./API/scrapers/openinsider.ts";
 import { processTransactions } from "./API/scrapers/processOpenInsider.ts";
 import { register } from "./API/authentication/register.ts";
 import jwt from "jsonwebtoken";
+import { login } from "./API/authentication/login.ts";
 
 
 const adapter = new PrismaMariaDb({
@@ -58,9 +58,15 @@ app.post('/register', async (c) => {
 
 app.post('/login', async (c) => {
   const body = await c.req.json();
-  const { email, password } = body;
 
-  return c.json({ message: "called correctly" });
+  const user = await login(body, prisma);
+
+  if (typeof user === "string") {
+    return c.json({ error: user }, 400);
+  }
+
+
+  return c.json(user);
 });
 
 serve({

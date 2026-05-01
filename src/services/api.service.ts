@@ -4,6 +4,7 @@ import { CalendarEvent } from "../types/calendar";
 import { Observable } from "rxjs";
 import { insiderTransaction } from "../types/insideTransactions";
 import { User } from "../types/user";
+import { AuthResponse } from "../types/authResponse";
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -17,8 +18,8 @@ export class ApiService {
     return this.http.get<insiderTransaction[]>(`http://localhost:3000/insiderTrades`);
   }
 
-  public loginUser(email: string, password: string): Observable<User> {
-    return this.http.post<User>(`http://localhost:3000/login`, { email, password });
+  public loginUser(email: string, password: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`http://localhost:3000/login`, { email, password });
   }
 
   public registerUser(username: string, email: string, password: string): Observable<User> {
