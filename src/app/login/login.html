@@ -5,4 +5,8 @@
   <button type="submit">Login</button>
 </form>
 
+@if(loginError) {
+  <p class="error">{{ loginError }}</p>
+}
+
 <a href="/register">No account? Register now</a>

@@ -59,14 +59,14 @@ app.post('/register', async (c) => {
 app.post('/login', async (c) => {
   const body = await c.req.json();
 
-  const user = await login(body, prisma);
+  const result = await login(body, prisma);
 
-  if (typeof user === "string") {
-    return c.json({ error: user }, 400);
+  if ("error" in result) {
+    return c.json(result, 401);
   }
 
 
-  return c.json(user);
+  return c.json(result);
 });
 
 serve({

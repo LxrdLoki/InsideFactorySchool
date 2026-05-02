@@ -10,13 +10,13 @@ export async function login(body: any, prisma: any) {
   console.log("user -> ", user)
 
   if (!user) {
-    return "Invalid credentials";
+    return { error: "Invalid credentials" };
   }
 
   const validPassword = await bcrypt.compare(password, user.password);
 
   if (!validPassword) {
-    return "Invalid credentials";
+    return { error: "Invalid credentials" };
   }
 
   const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET!, { expiresIn: '1h' });

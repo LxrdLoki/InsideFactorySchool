@@ -1,4 +1,11 @@
 import { Injectable } from "@angular/core";
+import jwt_decode from "jwt-decode";
+
+type DecodedToken = {
+  userId: number;
+  role: string;
+  exp: number;
+};
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -44,5 +51,24 @@ export class AuthService {
   public logout(): void {
     localStorage.removeItem('token');
     window.location.href = '/';
+  }
+
+  public validateToken(token: string): boolean {
+    try {
+      const decodedToken = jwt_decode<DecodedToken>(token);
+
+      const ifExpired = decodedToken.exp * 1000 < Date.now();
+
+      if (ifExpired) {
+        this.logout();
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error validating token -> ', error);
+      localStorage.removeItem('token');
+      return false;
+    }
   }
 }

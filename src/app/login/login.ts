@@ -9,6 +9,8 @@ import { ApiService } from '../../services/api.service';
 })
 export class Login {
 
+  public loginError: string | null = null;
+
   constructor(public apiService: ApiService) { }
 
   public login(event: Event) {
@@ -20,10 +22,11 @@ export class Login {
     this.apiService.loginUser(email, password).subscribe({
       next: (response) => {
         localStorage.setItem("token", response.token);
-        console.log('logged in -> ', response);
+        window.location.href = '/';
       },
       error: (err) => {
-        console.error('Error logging in user -> ', err);
+        console.error('Error logging in user -> ', err.error.error);
+        this.loginError = err.error?.message;
       }
     });
   }

@@ -8,6 +8,8 @@ import { ApiService } from '../../services/api.service';
   styleUrl: './register.scss',
 })
 export class Register {
+  public registerError: string | null = null;
+
   constructor(public apiService: ApiService) { }
 
   public register(event: Event) {
@@ -21,9 +23,11 @@ export class Register {
     this.apiService.registerUser(username, email, password).subscribe({
       next: (response) => {
         console.log('registerded -> ', response);
+        window.location.href = '/login';
       },
       error: (err) => {
         console.error('Error registering user -> ', err);
+        this.registerError = 'Error registering user, please try again';
       }
     });
   }
