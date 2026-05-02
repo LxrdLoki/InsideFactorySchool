@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import jwt_decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 type DecodedToken = {
   userId: number;
@@ -55,7 +55,7 @@ export class AuthService {
 
   public validateToken(token: string): boolean {
     try {
-      const decodedToken = jwt_decode<DecodedToken>(token);
+      const decodedToken = jwtDecode<DecodedToken>(token);
 
       const ifExpired = decodedToken.exp * 1000 < Date.now();
 
