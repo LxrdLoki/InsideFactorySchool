@@ -4,10 +4,15 @@
       <a href="/">
         <img src="logo_with_text.svg" alt="logo">
       </a>
+      <a href="/forum" class="linksHolder">Forum</a>
     </div>
 
     <div class="buttonsHolder">
-      <a href="/login">Login</a>
+      @if (isLoggedIn()) {
+        <a href="" (click)="logout()">Logout</a>
+      } @else {
+        <a href="/login">Login</a>
+      }
     </div>
   </nav>
 </section>

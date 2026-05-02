@@ -19,6 +19,7 @@ export class Login {
 
     this.apiService.loginUser(email, password).subscribe({
       next: (response) => {
+        localStorage.setItem("token", response.token);
         console.log('logged in -> ', response);
       },
       error: (err) => {
