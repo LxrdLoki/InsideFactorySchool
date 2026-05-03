@@ -9,7 +9,7 @@ export async function register(body: any, prisma: any): Promise<string | User> {
   const emailExists = await prisma.user.findUnique({ where: { email } });
 
   if (emailExists) {
-    return "Emaiol already in use";
+    return "Email already in use";
   }
 
   const userNameExists = await prisma.user.findUnique({ where: { username } });

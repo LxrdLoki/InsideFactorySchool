@@ -1,0 +1,59 @@
+@use "../../styling/mixins.scss" as mixins;
+@use "../../styling/variables.scss" as v;
+
+.registerHolder{
+  background-color: #fff;
+  padding: 20px;
+
+  .headerHolder{
+    background-color: v.$primary-color;
+    margin: -20px;
+    padding: 10px 20px;
+
+    span{
+      font-size: 1.25rem;
+      color: v.$primary-font-color;
+    }
+  }
+  .formHolder{
+    display: flex;
+    flex-direction: column;
+    padding-top: 40px;
+
+    .doubleCol{
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      input{
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        width: calc(100% - 22px);
+      }
+
+      .error, .required{
+        color: red;
+        // margin-top: 5px;
+      }
+    }
+
+    .secondRow{
+      padding-top: 30px;
+    }
+
+    .button{
+      margin-top: 30px;
+      align-self: center;
+      width: 75%;
+    }
+
+    .noAccountButton{
+      align-self: center;
+      padding-top: 10px;
+      a{
+        text-decoration: none;
+      }
+    }
+  }
+}

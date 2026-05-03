@@ -44,8 +44,14 @@ export class Register {
         window.location.href = '/login';
       },
       error: (err) => {
-        console.error('Error registering user -> ', err);
-        this.registerError = 'Error registering user, please try again';
+        console.error('Error registering user -> ', err.error.error);
+        this.registerError = err.error.error;
+
+        if (this.registerError!.includes("Username")) {
+          this.registerForm.get('username')?.setErrors({ usernameTaken: true });
+        } else if (this.registerError!.includes("Email")) {
+          this.registerForm.get('email')?.setErrors({ emailTaken: true });
+        }
       }
     });
   }
