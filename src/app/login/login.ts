@@ -1,32 +1,46 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ApiService } from '../../services/api.service';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
 export class Login {
-
   public loginError: string | null = null;
+
+  private formBuilder = inject(FormBuilder);
+
 
   constructor(public apiService: ApiService) { }
 
+  public loginForm = this.formBuilder.group({
+    email: ['', [Validators.required]],
+    password: ['', [Validators.required]]
+  });
+
   public login(event: Event) {
     event.preventDefault();
-    const form = event.target as HTMLFormElement;
-    const email = (form.elements[0] as HTMLInputElement).value;
-    const password = (form.elements[1] as HTMLInputElement).value;
 
-    this.apiService.loginUser(email, password).subscribe({
+    if (this.loginForm.invalid) {
+      console.error('Form is invalid -> ', this.loginForm.errors);
+      this.loginForm.markAllAsTouched();
+      return;
+    }
+
+    const email = this.loginForm.get('email')?.value;
+    const password = this.loginForm.get('password')?.value;
+
+    this.apiService.loginUser(email!, password!).subscribe({
       next: (response) => {
         localStorage.setItem("token", response.token);
         window.location.href = '/';
       },
       error: (err) => {
         console.error('Error logging in user -> ', err.error.error);
-        this.loginError = err.error?.message;
+        this.loginForm.setErrors({ invalidCredentials: true });
       }
     });
   }
