@@ -48,7 +48,7 @@
       </div>
 
     </div>
-    <button type="submit" class="button">Create account</button>
+    <button type="submit" class="button" [disabled]="registerForm.invalid">Create account</button>
     <span class="noAccountButton">Already part of the community? <a href="/login">Login here!</a></span>
   </form>
 
