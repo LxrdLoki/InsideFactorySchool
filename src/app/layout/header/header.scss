@@ -4,6 +4,7 @@
 .navHolder{
   width: 100vw;
   position: fixed;
+  z-index: 999;
 }
 
 .headerHolder {
@@ -15,7 +16,6 @@
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
   @include mixins.main-padding(10px);
   border-bottom: 10px solid v.$primary-color;
-  z-index: 999;
 
   .navLogo {
     display: flex;

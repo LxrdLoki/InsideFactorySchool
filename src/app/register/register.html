@@ -1,8 +1,28 @@
-<form action="POST" (submit)="register($event)">
-  <input type="text" placeholder="Username" />
-  <input type="email" placeholder="Email" />
-  <input type="password" placeholder="Password" />
-  <button type="submit">Register</button>
+<form [formGroup]="registerForm" (ngSubmit)="register($event)">
+
+  <input type="text" placeholder="Username" formControlName="username" />
+  @if(registerForm.get('username')?.touched && registerForm.get('username')?.invalid) {
+    <p class="error">Username must be at least 6 characters long</p>
+  }
+
+  <input type="email" placeholder="Email" formControlName="email" />
+  @if(registerForm.get('email')?.touched && registerForm.get('email')?.invalid) {
+    <p class="error">Invalid email address</p>
+  }
+
+  <input type="password" placeholder="Password" formControlName="password" />
+  @if(registerForm.get('password')?.touched && registerForm.get('password')?.invalid) {
+    <p class="error">
+      Password must be atleast 6 characters long, 1 uppercase, 1 number
+    </p>
+  }
+
+  <input type="password" placeholder="Confirm Password" formControlName="confirmPassword" />
+  @if(registerForm.errors?.['matchPasswords'] && registerForm.get('confirmPassword')?.touched) {
+    <p class="error">Passwords do not match</p>
+  }
+
+  <button type="submit">Register22</button>
 </form>
 
 @if(registerError) {
