@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { matchPasswords } from '../regex/matchPasswords';
@@ -9,7 +9,7 @@ import { matchPasswords } from '../regex/matchPasswords';
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
-export class Register {
+export class Register implements OnInit {
   public registerError: string | null = null;
   private formBuilder = inject(FormBuilder);
 
@@ -28,6 +28,12 @@ export class Register {
     ],
     confirmPassword: ['', [Validators.required]]
   }, { validators: matchPasswords });
+
+  ngOnInit() {
+    this.registerForm.valueChanges.subscribe(() => {
+      this.registerError = null;
+    });
+  }
 
   public register(event: Event) {
     event.preventDefault();

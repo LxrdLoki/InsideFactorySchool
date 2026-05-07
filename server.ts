@@ -9,6 +9,7 @@ import { processTransactions } from "./API/scrapers/processOpenInsider.ts";
 import { register } from "./API/authentication/register.ts";
 import jwt from "jsonwebtoken";
 import { login } from "./API/authentication/login.ts";
+import { createRateLimiter } from "./API/middleware/rateLimitMiddleware.ts";
 
 
 const adapter = new PrismaMariaDb({
@@ -22,6 +23,9 @@ const prisma = new PrismaClient({ adapter });
 
 const app = new Hono()
 app.use('*', cors());
+
+// this will be 5 attempts per 15 minutes for all auth routes (register and login) to prevent brute force attacks
+const authRateLimiter = createRateLimiter(5, 15 * 60 * 1000);
 
 app.get('/calendar/:week', async (c) => {
   const weekNumber = Number(c.req.param('week'));
@@ -44,7 +48,7 @@ app.get('/insiderTrades', async (c) => {
   return c.json({ error: "Failed to scrape data" }, 500)
 })
 
-app.post('/register', async (c) => {
+app.post('/register', authRateLimiter, async (c) => {
   const body = await c.req.json();
 
   const user = await register(body, prisma);
@@ -56,7 +60,7 @@ app.post('/register', async (c) => {
   return c.json(user);
 });
 
-app.post('/login', async (c) => {
+app.post('/login', authRateLimiter, async (c) => {
   const body = await c.req.json();
 
   const result = await login(body, prisma);

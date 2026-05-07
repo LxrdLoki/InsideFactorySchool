@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
@@ -8,7 +8,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
-export class Login {
+export class Login implements OnInit {
   public loginError: string | null = null;
 
   private formBuilder = inject(FormBuilder);
@@ -20,6 +20,12 @@ export class Login {
     email: ['', [Validators.required]],
     password: ['', [Validators.required]]
   });
+
+  ngOnInit() {
+    this.loginForm.valueChanges.subscribe(() => {
+      this.loginError = null;
+    });
+  }
 
   public login(event: Event) {
     event.preventDefault();
@@ -40,7 +46,7 @@ export class Login {
       },
       error: (err) => {
         console.error('Error logging in user -> ', err.error.error);
-        this.loginForm.setErrors({ invalidCredentials: true });
+        this.loginError = err.error.error || 'Invalid email or password';
       }
     });
   }

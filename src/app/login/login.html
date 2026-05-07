@@ -13,8 +13,8 @@
       <label for="password">Password <span>*</span></label>
       <input type="password" formControlName="password"  id="password" placeholder="Password" />
     </div>
-    @if(loginForm.errors?.['invalidCredentials']) {
-      <span class="error">Invalid email or password</span>
+    @if(loginError) {
+      <span class="error">{{ loginError }}</span>
     }
     <button type="submit" class="button" [disabled]="loginForm.invalid">Login</button>
 
