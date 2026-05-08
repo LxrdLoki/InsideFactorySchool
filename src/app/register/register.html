@@ -1,0 +1,58 @@
+<div class="registerHolder">
+  <div class="headerHolder">
+    <span>Create your InsiderFactory account</span>
+  </div>
+
+  <form [formGroup]="registerForm" class="formHolder" (ngSubmit)="register($event)">
+
+    <div class="row">
+      <div class="doubleCol">
+        <label for="username">Username (Visible to others) <span class="required">*</span></label>
+        <input type="text" id="username" placeholder="Username" formControlName="username" />
+        @if(registerForm.get('username')?.touched && registerForm.get('username')?.hasError('minlength')) {
+          <span class="error">Username must be at least 6 characters long</span>
+        }
+        @if(registerForm.get('username')?.hasError('usernameTaken')) {
+          <span class="error">Username already in use</span>
+        }
+      </div>
+
+      <div class="doubleCol">
+        <label for="email">Email <span class="required">*</span></label>
+        <input type="email" id="email" placeholder="Email" formControlName="email" />
+        @if(registerForm.get('email')?.touched && registerForm.get('email')?.hasError('email')) {
+          <span class="error">Invalid email address</span>
+        }
+        @if(registerForm.get('email')?.hasError('emailTaken')) {
+          <span class="error">Email already in use</span>
+        }
+      </div>
+    </div>
+    <div class="row secondRow">
+      <div class="doubleCol">
+        <label for="password">Password <span class="required">*</span></label>
+        <input type="password" id="password" placeholder="Password" formControlName="password" />
+        @if(registerForm.get('password')?.touched && registerForm.get('password')?.invalid) {
+          <span class="error">
+            Password must be atleast 6 characters long, 1 uppercase, 1 number
+          </span>
+        }
+      </div>
+
+      <div class="doubleCol">
+        <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" formControlName="confirmPassword" />
+        @if(registerForm.errors?.['matchPasswords'] && registerForm.get('confirmPassword')?.touched) {
+          <span class="error">Passwords do not match</span>
+        }
+      </div>
+
+    </div>
+    @if(registerError) {
+      <span class="error">{{ registerError }}</span>
+    }
+    <button type="submit" class="button" [disabled]="registerForm.invalid">Create account</button>
+    <span class="noAccountButton">Already part of the community? <a href="/login">Login here!</a></span>
+  </form>
+
+</div>

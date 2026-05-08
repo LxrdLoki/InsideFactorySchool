@@ -1,0 +1,24 @@
+<div class="loginHolder">
+  <div class="headerHolder">
+    <span>Login to InsiderFactory account</span>
+  </div>
+  <form [formGroup]="loginForm" class="formHolder" (submit)="login($event)">
+
+    <div class="inputHolder">
+      <label for="email">Email <span>*</span></label>
+      <input type="email" formControlName="email" id="email" placeholder="Email" />
+    </div>
+
+    <div class="inputHolder">
+      <label for="password">Password <span>*</span></label>
+      <input type="password" formControlName="password"  id="password" placeholder="Password" />
+    </div>
+    @if(loginError) {
+      <span class="error">{{ loginError }}</span>
+    }
+    <button type="submit" class="button" [disabled]="loginForm.invalid">Login</button>
+
+  <span class="noAccountButton">New to InsiderFactory? <a  href="/register">Join us now!</a></span>
+  </form>
+
+</div>

@@ -5,8 +5,11 @@ import { serve } from '@hono/node-server'
 import { PrismaClient } from "./prisma/generated/prisma/client.ts"
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { scrapeForexFactory } from './API/scrapers/forexfactory.ts'
-import { scrapeOpenInsider } from "./API/scrapers/openinsider.ts";
 import { processTransactions } from "./API/scrapers/processOpenInsider.ts";
+import { register } from "./API/authentication/register.ts";
+import jwt from "jsonwebtoken";
+import { login } from "./API/authentication/login.ts";
+import { createRateLimiter } from "./API/middleware/rateLimitMiddleware.ts";
 
 
 const adapter = new PrismaMariaDb({
@@ -20,6 +23,9 @@ const prisma = new PrismaClient({ adapter });
 
 const app = new Hono()
 app.use('*', cors());
+
+// this will be 5 attempts per 15 minutes for all auth routes (register and login) to prevent brute force attacks
+const authRateLimiter = createRateLimiter(5, 15 * 60 * 1000);
 
 app.get('/calendar/:week', async (c) => {
   const weekNumber = Number(c.req.param('week'));
@@ -41,6 +47,31 @@ app.get('/insiderTrades', async (c) => {
 
   return c.json({ error: "Failed to scrape data" }, 500)
 })
+
+app.post('/register', authRateLimiter, async (c) => {
+  const body = await c.req.json();
+
+  const user = await register(body, prisma);
+
+  if (typeof user === "string") {
+    return c.json({ error: user }, 400);
+  }
+
+  return c.json(user);
+});
+
+app.post('/login', authRateLimiter, async (c) => {
+  const body = await c.req.json();
+
+  const result = await login(body, prisma);
+
+  if ("error" in result) {
+    return c.json(result, 401);
+  }
+
+
+  return c.json(result);
+});
 
 serve({
   fetch: app.fetch,
