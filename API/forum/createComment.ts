@@ -7,8 +7,6 @@ export async function createComment(
 
   const { text } = body;
 
-  console.log("called")
-
   if (!text) {
     return { error: "Comment cannot be empty" };
   }

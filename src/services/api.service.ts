@@ -41,9 +41,23 @@ export class ApiService {
     return this.http.get(`http://localhost:3000/forum/posts/${id}`);
   }
 
+  public deletePost(postId: number): Observable<any> {
+    const token = localStorage.getItem("token");
+    return this.http.delete(`http://localhost:3000/forum/posts/${postId}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
   public createComment(postId: number, text: string): Observable<any> {
     const token = localStorage.getItem("token");
     return this.http.post(`http://localhost:3000/forum/posts/${postId}/comments`, { text }, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
+  public deleteComment(commentId: number): Observable<any> {
+    const token = localStorage.getItem("token");
+    return this.http.delete(`http://localhost:3000/forum/comments/${commentId}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
   }

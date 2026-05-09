@@ -1,10 +1,14 @@
-@if(post()) {
+@if(post(); as currentPost) {
 
-  <h2>{{ post()?.title }}</h2>
+  <h2>{{ currentPost.title }}</h2>
 
-  <p>{{ post()?.text }}</p>
+  <p>{{ currentPost.text }}</p>
 
-  <span>{{ post()?.subject }}</span>
+  <span>{{ currentPost.subject }}</span>
+
+  @if(authService.isOwnerOrAdmin(currentPost.userId)) {
+    <button (click)="deletePost()">Delete post</button>
+  }
 
   <div>
     <h2>Comments</h2>
@@ -14,13 +18,18 @@
       <button type="submit">Add Comment</button>
     </form>
 
-    @for(comment of post()?.comments; track comment.id) {
+    @for(comment of currentPost.comments; track comment.id) {
       <div class="comment">
+
         <p>{{ comment.user.username }}</p>
         <p>{{ comment.text }}</p>
 
-        <!-- TODO: Implement comment deletion -->
-        <button>Delete comment</button>
+        @if(authService.isOwnerOrAdmin(comment.userId)) {
+          <button (click)="deleteComment(comment.id)">
+            Delete comment
+          </button>
+        }
+
       </div>
     }
 

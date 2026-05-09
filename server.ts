@@ -17,6 +17,8 @@ import { getAuthenticatedUser } from "./API/helpers/contextHelper.ts";
 import { getPosts } from "./API/forum/getPosts.ts";
 import { getPost } from "./API/forum/getSinglePost.ts";
 import { createComment } from "./API/forum/createComment.ts";
+import { deletePost } from "./API/forum/deletePost.ts";
+import { deleteComment } from "./API/forum/deleteComment.ts";
 
 
 const adapter = new PrismaMariaDb({
@@ -146,6 +148,43 @@ app.post("/forum/posts/:id/comments", authMiddleware, requireRole("USER"), async
   }
 
   return c.json(comment);
+});
+
+app.delete("/forum/posts/:id", authMiddleware, requireRole("USER"), async (c) => {
+
+  const postId = Number(c.req.param("id"));
+
+  const user = getAuthenticatedUser(c);
+
+  const result = await deletePost(
+    prisma,
+    postId,
+    user
+  );
+
+  if (result.error) {
+    return c.json({ error: result.error }, 403);
+  }
+
+  return c.json(result);
+});
+
+app.delete("/forum/comments/:id", authMiddleware, requireRole("USER"), async (c) => {
+
+  const commentId = Number(c.req.param("id"));
+  const user = getAuthenticatedUser(c);
+
+  const result = await deleteComment(
+    prisma,
+    commentId,
+    user
+  );
+
+  if (result.error) {
+    return c.json({ error: result.error }, 403);
+  }
+
+  return c.json(result);
 });
 
 serve({
