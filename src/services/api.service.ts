@@ -36,4 +36,8 @@ export class ApiService {
   public getForumPosts(category: string): Observable<any> {
     return this.http.get(`http://localhost:3000/forum/${category.toUpperCase()}`);
   }
+
+  public getSinglePost(id: string): Observable<any> {
+    return this.http.get(`http://localhost:3000/forum/posts/${id}`);
+  }
 }

@@ -15,6 +15,7 @@ import { requireRole } from "./API/middleware/roleMiddleware.ts";
 import { createPost } from "./API/forum/createPost.ts";
 import { getAuthenticatedUser } from "./API/helpers/contextHelper.ts";
 import { getPosts } from "./API/forum/getPosts.ts";
+import { getPost } from "./API/forum/getSinglePost.ts";
 
 
 const adapter = new PrismaMariaDb({
@@ -109,6 +110,19 @@ app.get('/forum/:category', async (c) => {
   });
 
   return c.json(posts);
+});
+
+app.get("/forum/posts/:id", async (c) => {
+
+  const id = Number(c.req.param("id"));
+
+  const post = await getPost(prisma, id);
+
+  if (!post) {
+    return c.json({ error: "Post not found" }, 404);
+  }
+
+  return c.json(post);
 });
 
 serve({
