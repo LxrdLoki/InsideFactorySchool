@@ -1,0 +1,49 @@
+import { Component, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ApiService } from '../../../services/api.service';
+
+@Component({
+  selector: 'app-new-forum-post',
+  imports: [ReactiveFormsModule],
+  templateUrl: './new-forum-post.html',
+  styleUrl: './new-forum-post.scss',
+})
+export class NewForumPost {
+  private formBuilder = inject(FormBuilder);
+  public postError: string | null = null;
+
+  constructor(public apiService: ApiService) { }
+
+  public forumForm = this.formBuilder.group({
+    title: ['', [Validators.required, Validators.minLength(6)]],
+    subject: ['', [Validators.required]],
+    text: ['', [Validators.required, Validators.minLength(20), Validators.maxLength(2000)]],
+  });
+
+  ngOnInit(): void {
+    this.forumForm.valueChanges.subscribe(() => {
+      this.postError = null;
+    });
+  }
+
+  public createPost(event: Event) {
+    event.preventDefault();
+
+    if (this.forumForm.invalid) {
+      this.forumForm.markAllAsTouched();
+      return;
+    }
+
+    const { title, subject, text } = this.forumForm.value;
+
+    this.apiService.createPost(title!, subject!, text!).subscribe({
+      next: (response) => {
+        window.location.href = '/forum';
+      },
+      error: (err) => {
+        this.postError = err.error.error;
+        console.error('Error creating post -> ', err.error.error);
+      }
+    });
+  }
+}

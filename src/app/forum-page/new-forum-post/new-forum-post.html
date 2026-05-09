@@ -1,0 +1,16 @@
+
+<form action="POST" [formGroup]="forumForm" (ngSubmit)="createPost($event)">
+  <input type="text" formControlName="title" placeholder="Title">
+  <select formControlName="subject">
+    <option value="" disabled selected>Select category</option>
+    <option value="FOREX">Forex</option>
+    <option value="STOCKS">Stocks</option>
+    <option value="BUGS">Bugs</option>
+    <option value="OFFTOPIC">Off topic</option>
+  </select>
+  <textarea formControlName="text" placeholder="Content"></textarea>
+  @if(postError) {
+    <span class="error">{{ postError }}</span>
+  }
+  <button type="submit">Create Post</button>
+</form>

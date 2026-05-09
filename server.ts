@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import "dotenv/config";
 import { cors } from "hono/cors";
 import { serve } from '@hono/node-server'
-import { PrismaClient } from "./prisma/generated/prisma/client.ts"
+import { PrismaClient, ForumCategory } from "./prisma/generated/prisma/client.ts"
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { scrapeForexFactory } from './API/scrapers/forexfactory.ts'
 import { processTransactions } from "./API/scrapers/processOpenInsider.ts";
@@ -14,6 +14,7 @@ import { authMiddleware } from "./API/middleware/authMiddleware.ts";
 import { requireRole } from "./API/middleware/roleMiddleware.ts";
 import { createPost } from "./API/forum/createPost.ts";
 import { getAuthenticatedUser } from "./API/helpers/contextHelper.ts";
+import { getPosts } from "./API/forum/getPosts.ts";
 
 
 const adapter = new PrismaMariaDb({
@@ -89,6 +90,25 @@ app.post("/forum/createPost", authMiddleware, requireRole("USER"), async (c) => 
   }
 
   return c.json(newPost);
+});
+
+app.get('/forum/:category', async (c) => {
+
+  const category = c.req.param('category');
+
+  const posts = await prisma.forumPost.findMany({
+    where: {
+      subject: category as ForumCategory
+    },
+    include: {
+      user: true
+    },
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
+
+  return c.json(posts);
 });
 
 serve({

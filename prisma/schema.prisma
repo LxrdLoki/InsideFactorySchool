@@ -7,7 +7,7 @@ datasource db {
   provider = "mysql"
 }
 
-model InsiderTrans {
+model insiderTransaction {
   id     Int    @id @default(autoincrement())
   ticker String @unique
 

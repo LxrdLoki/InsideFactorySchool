@@ -32,4 +32,8 @@ export class ApiService {
       headers: { Authorization: `Bearer ${token}` }
     });
   }
+
+  public getForumPosts(category: string): Observable<any> {
+    return this.http.get(`http://localhost:3000/forum/${category.toUpperCase()}`);
+  }
 }

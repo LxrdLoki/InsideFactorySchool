@@ -1,0 +1,7 @@
+
+
+@for (post of posts; track $index) {
+  <p>{{ post.title }}</p>
+  <p>{{ post.text }}</p>
+  p<a href="/forum/post/{{ post.id }}">View post</a>
+}
