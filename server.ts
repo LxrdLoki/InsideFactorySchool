@@ -16,6 +16,7 @@ import { createPost } from "./API/forum/createPost.ts";
 import { getAuthenticatedUser } from "./API/helpers/contextHelper.ts";
 import { getPosts } from "./API/forum/getPosts.ts";
 import { getPost } from "./API/forum/getSinglePost.ts";
+import { createComment } from "./API/forum/createComment.ts";
 
 
 const adapter = new PrismaMariaDb({
@@ -123,6 +124,28 @@ app.get("/forum/posts/:id", async (c) => {
   }
 
   return c.json(post);
+});
+
+app.post("/forum/posts/:id/comments", authMiddleware, requireRole("USER"), async (c) => {
+
+  const body = await c.req.json();
+
+  const postId = Number(c.req.param("id"));
+
+  const user = getAuthenticatedUser(c);
+
+  const comment = await createComment(
+    body,
+    prisma,
+    user.userId,
+    postId
+  );
+
+  if (comment.error) {
+    return c.json({ error: comment.error }, 400);
+  }
+
+  return c.json(comment);
 });
 
 serve({

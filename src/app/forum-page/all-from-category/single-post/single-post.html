@@ -1,13 +1,31 @@
-<p>single-post works!</p>
+@if(post()) {
 
-<h2>{{ post().title }}</h2>
+  <h2>{{ post()?.title }}</h2>
 
-<p>{{ post().text }}</p>
+  <p>{{ post()?.text }}</p>
 
-<span>{{ post().subject }}</span>
+  <span>{{ post()?.subject }}</span>
 
-<div>
-  <h2>Comments</h2>
+  <div>
+    <h2>Comments</h2>
 
-  <input type="text" placeholder="Add a comment...">
-</div>
+    <form (submit)="createComment($event, commentText.value)">
+      <input type="text" #commentText placeholder="Add a comment...">
+      <button type="submit">Add Comment</button>
+    </form>
+
+    @for(comment of post()?.comments; track comment.id) {
+      <div class="comment">
+        <p>{{ comment.user.username }}</p>
+        <p>{{ comment.text }}</p>
+
+        <!-- TODO: Implement comment deletion -->
+        <button>Delete comment</button>
+      </div>
+    }
+
+  </div>
+
+} @else {
+  <p>Loading...</p>
+}

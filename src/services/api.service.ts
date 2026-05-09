@@ -40,4 +40,11 @@ export class ApiService {
   public getSinglePost(id: string): Observable<any> {
     return this.http.get(`http://localhost:3000/forum/posts/${id}`);
   }
+
+  public createComment(postId: number, text: string): Observable<any> {
+    const token = localStorage.getItem("token");
+    return this.http.post(`http://localhost:3000/forum/posts/${postId}/comments`, { text }, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
 }

@@ -27,4 +27,22 @@ export class SinglePost implements OnInit {
       }
     });
   }
+
+  public createComment(event: Event, text: string) {
+    event.preventDefault();
+
+    this.apiService.createComment(Number(this.postId), text).subscribe({
+      next: (response) => {
+        console.log('Comment created -> ', response);
+
+        // refresh post to get the new comment
+        this.apiService.getSinglePost(this.postId).subscribe((updatedPost) => {
+          this.post.set(updatedPost);
+        });
+      },
+      error: (err) => {
+        console.error('Error creating comment -> ', err);
+      }
+    });
+  }
 }
