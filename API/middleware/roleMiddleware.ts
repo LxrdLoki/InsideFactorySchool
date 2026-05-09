@@ -1,6 +1,8 @@
+import { AuthenticatedUser } from "../types/context";
+
 export function requireRole(requiredRole: "USER" | "ADMIN") {
   return async (c: any, next: any) => {
-    const user = c.get("user");
+    const user = c.get("user") as AuthenticatedUser | undefined;
 
     // not logged in, return 401 unauthorized
     if (!user) {

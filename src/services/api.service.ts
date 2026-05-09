@@ -25,4 +25,11 @@ export class ApiService {
   public registerUser(username: string, email: string, password: string): Observable<User> {
     return this.http.post<User>(`http://localhost:3000/register`, { username, email, password });
   }
+
+  public createPost(title: string, subject: string, text: string): Observable<any> {
+    const token = localStorage.getItem("token");
+    return this.http.post(`http://localhost:3000/forum/createPost`, { title, subject, text }, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
 }

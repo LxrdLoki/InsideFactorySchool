@@ -10,6 +10,10 @@ import { register } from "./API/authentication/register.ts";
 import jwt from "jsonwebtoken";
 import { login } from "./API/authentication/login.ts";
 import { createRateLimiter } from "./API/middleware/rateLimitMiddleware.ts";
+import { authMiddleware } from "./API/middleware/authMiddleware.ts";
+import { requireRole } from "./API/middleware/roleMiddleware.ts";
+import { createPost } from "./API/forum/createPost.ts";
+import { getAuthenticatedUser } from "./API/helpers/contextHelper.ts";
 
 
 const adapter = new PrismaMariaDb({
@@ -71,6 +75,20 @@ app.post('/login', authRateLimiter, async (c) => {
 
 
   return c.json(result);
+});
+
+app.post("/forum/createPost", authMiddleware, requireRole("USER"), async (c) => {
+  const body = await c.req.json();
+
+  const user = getAuthenticatedUser(c);
+
+  const newPost = await createPost(body, prisma, user.userId);
+
+  if (newPost.error) {
+    return c.json({ error: newPost.error }, 400);
+  }
+
+  return c.json(newPost);
 });
 
 serve({

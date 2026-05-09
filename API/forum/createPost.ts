@@ -1,0 +1,42 @@
+export async function createPost(body: any, prisma: any, userId: number) {
+  const { title, text, subject } = body;
+
+  if (!title || !text || !subject) {
+    return { error: "Missing required fields" };
+  }
+
+  if (title.length > 100) {
+    return { error: "Title too long" };
+  }
+
+  if (text.length > 5000) {
+    return { error: "Post too long" };
+  }
+
+  // TODO: add typing for subject and validate it here
+
+  try {
+    const post = await prisma.forumPost.create({
+      data: {
+        title,
+        text,
+        subject,
+        userId
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            role: true
+          }
+        }
+      }
+    });
+
+    return post;
+  } catch (error: any) {
+    console.error("error creating forum post -> ", error);
+    return { error: "Failed to create post. Please try again." };
+  }
+}
