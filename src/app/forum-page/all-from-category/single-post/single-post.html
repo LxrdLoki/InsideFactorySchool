@@ -1,38 +1,72 @@
 @if(post(); as currentPost) {
 
-  <h2>{{ currentPost.title }}</h2>
+  <div class="single-header">
+    <a
+      [routerLink]="['/forum', currentPost.subject]"
+      class="back-btn"
+    >
+      ← Back to posts
+    </a>
+  </div>
 
-  <p>{{ currentPost.text }}</p>
+  <div class="single-post-card">
+    <div class="title-row">
+      <h1>
+        {{ currentPost.title }}
+        <span class="tag">
+          #{{ currentPost.id }}
+        </span>
+      </h1>
 
-  <span>{{ currentPost.subject }}</span>
+      @if(authService.isOwnerOrAdmin(currentPost.userId)) {
 
-  @if(authService.isOwnerOrAdmin(currentPost.userId)) {
-    <button (click)="deletePost()">Delete post</button>
-  }
+        <button class="delete-btn" (click)="deletePost()">Delete post</button>
+      }
+    </div>
 
-  <div>
-    <h2>Comments</h2>
+    <div class="post-body">
+      {{ currentPost.text }}
+    </div>
 
+    <div class="post-footer">
+      <span class="subject">
+        {{ currentPost.subject }}
+      </span>
+
+      <span class="creator">
+        By {{ currentPost.user.username }}
+      </span>
+    </div>
+  </div>
+
+  <div class="comment-create">
+    <h2>Add a comment</h2>
     <form (submit)="createComment($event, commentText.value)">
-      <input type="text" #commentText placeholder="Add a comment...">
-      <button type="submit">Add Comment</button>
+      <textarea
+        #commentText
+        placeholder="Write your comment..."
+      ></textarea>
+      <button type="submit">Add comment</button>
     </form>
+  </div>
 
+  <div class="comments-wrapper">
     @for(comment of currentPost.comments; track comment.id) {
-      <div class="comment">
+      <div class="comment-card">
+        <div class="comment-top">
+          <span class="username">
+            {{ comment.user.username }}
+          </span>
+          @if(authService.isOwnerOrAdmin(comment.userId)) {
 
-        <p>{{ comment.user.username }}</p>
-        <p>{{ comment.text }}</p>
-
-        @if(authService.isOwnerOrAdmin(comment.userId)) {
-          <button (click)="deleteComment(comment.id)">
-            Delete comment
-          </button>
-        }
-
+            <button class="delete-comment-btn" (click)="deleteComment(comment.id)">Delete</button>
+          }
+        </div>
+        <p class="comment-text">
+          {{ comment.text }}
+        </p>
       </div>
     }
-
   </div>
 
 } @else {

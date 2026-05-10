@@ -1,12 +1,13 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ApiService } from '../../../../services/api.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-single-post',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './single-post.html',
   styleUrl: './single-post.scss',
 })

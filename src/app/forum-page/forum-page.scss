@@ -1,0 +1,55 @@
+@use "../../styling/variables" as v;
+
+.forumHolder {
+  margin: 50px auto;
+  max-width: 1200px;
+  padding: 0 20px;
+
+  > a {
+    display: inline-block;
+    text-decoration: none;
+    margin-bottom: 40px;
+  }
+}
+
+.headerHolder {
+  margin-bottom: 40px;
+
+  span {
+    font-size: 28px;
+    font-weight: 600;
+    color: v.$primary-font-color;
+  }
+}
+
+.categoryCard {
+  background: v.$dark-card-bg;
+  padding: 30px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: white;
+  box-shadow: v.$card-shadow;
+  transition: 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.35);
+  }
+
+  a{
+    text-decoration: none;
+    color: white;
+  }
+
+  h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 12px 0;
+  }
+
+  p {
+    color: v.$light-text;
+    margin: 0;
+    line-height: 1.6;
+  }
+}
