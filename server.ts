@@ -19,6 +19,8 @@ import { getPost } from "./API/forum/getSinglePost.ts";
 import { createComment } from "./API/forum/createComment.ts";
 import { deletePost } from "./API/forum/deletePost.ts";
 import { deleteComment } from "./API/forum/deleteComment.ts";
+import { upVotePost } from "./API/forum/upVotePost.ts";
+import { downVotePost } from "./API/forum/downVotePost.ts";
 
 
 const adapter = new PrismaMariaDb({
@@ -182,6 +184,42 @@ app.delete("/forum/comments/:id", authMiddleware, requireRole("USER"), async (c)
 
   if (result.error) {
     return c.json({ error: result.error }, 403);
+  }
+
+  return c.json(result);
+});
+
+app.post("/forum/posts/:id/upvote", authMiddleware, requireRole("USER"), async (c) => {
+
+  const postId = Number(c.req.param("id"));
+  const user = getAuthenticatedUser(c);
+
+  const result = await upVotePost(
+    prisma,
+    postId,
+    user.userId
+  );
+
+  if (result.error) {
+    return c.json({ error: result.error }, 400);
+  }
+
+  return c.json(result);
+});
+
+app.post("/forum/posts/:id/downvote", authMiddleware, requireRole("USER"), async (c) => {
+
+  const postId = Number(c.req.param("id"));
+  const user = getAuthenticatedUser(c);
+
+  const result = await downVotePost(
+    prisma,
+    postId,
+    user.userId
+  );
+
+  if (result.error) {
+    return c.json({ error: result.error }, 400);
   }
 
   return c.json(result);

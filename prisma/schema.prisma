@@ -44,13 +44,14 @@ enum ForumCategory {
 }
 
 model User {
-  id            Int            @id @default(autoincrement())
-  username      String         @unique
-  email         String         @unique
-  password      String
-  role          UserRole       @default(USER)
-  forumPosts    ForumPost[]
-  forumComments ForumComment[]
+  id             Int             @id @default(autoincrement())
+  username       String          @unique
+  email          String          @unique
+  password       String
+  role           UserRole        @default(USER)
+  forumPosts     ForumPost[]
+  forumComments  ForumComment[]
+  forumPostVotes ForumPostVote[]
 }
 
 model ForumPost {
@@ -68,7 +69,19 @@ model ForumPost {
   upvotes   Int @default(0)
   downvotes Int @default(0)
 
+  createdAt      DateTime        @default(now())
+  forumPostVotes ForumPostVote[]
+}
+
+model ForumPostVote {
+  id Int @id @default(autoincrement())
+  value Int
+  userId Int
+  postId Int
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  forumPost ForumPost @relation(fields: [postId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+  @@unique([userId, postId])
 }
 
 model ForumComment {

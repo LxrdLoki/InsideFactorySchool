@@ -34,4 +34,37 @@ export class AllFromCategory implements OnInit {
       }
     });
   }
+
+  public onUpvote(postId: number): void {
+    this.apiService.upvotePost(postId).subscribe({
+      next: (updatedPost) => {
+        this.updatePostInList(updatedPost);
+      },
+      error: (err) => {
+        console.error('Error upvoting post -> ', err);
+      }
+    });
+  }
+
+  public onDownvote(postId: number): void {
+    this.apiService.downvotePost(postId).subscribe({
+      next: (updatedPost) => {
+        this.updatePostInList(updatedPost);
+      },
+      error: (err) => {
+        console.error('Error downvoting post -> ', err);
+      }
+    });
+  }
+
+  private updatePostInList(updatedPost: any): void {
+    const currentPosts = this.posts();
+    if (currentPosts) {
+      const index = currentPosts.findIndex(p => p.id === updatedPost.id);
+      if (index !== -1) {
+        currentPosts[index] = updatedPost;
+        this.posts.set([...currentPosts]);
+      }
+    }
+  }
 }

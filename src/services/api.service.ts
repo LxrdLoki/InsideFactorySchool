@@ -61,4 +61,18 @@ export class ApiService {
       headers: { Authorization: `Bearer ${token}` }
     });
   }
+
+  public upvotePost(postId: number): Observable<any> {
+    const token = localStorage.getItem("token");
+    return this.http.post(`http://localhost:3000/forum/posts/${postId}/upvote`, {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
+  public downvotePost(postId: number): Observable<any> {
+    const token = localStorage.getItem("token");
+    return this.http.post(`http://localhost:3000/forum/posts/${postId}/downvote`, {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
 }

@@ -32,13 +32,13 @@
           </div>
 
           <div class="votes">
-            <button class="vote-btn">⬆</button>
+            <button class="vote-btn" (click)="onUpvote(post.id)">⬆</button>
 
             <span class="vote-count">
               {{ post.upvotes - post.downvotes }}
             </span>
 
-            <button class="vote-btn">⬇</button>
+            <button class="vote-btn" (click)="onDownvote(post.id)">⬇</button>
           </div>
 
         </div>
