@@ -53,6 +53,11 @@ export class AuthService {
     window.location.href = '/';
   }
 
+  /**
+   * this function validates the token by decoding it (savely)
+   * and checking if the exp date is in the past or not
+   * if the token is expired it will log out the user and return false
+   */
   public validateToken(token: string): boolean {
     try {
       const decodedToken = jwtDecode<DecodedToken>(token);
@@ -68,6 +73,28 @@ export class AuthService {
     } catch (error) {
       console.error('Error validating token -> ', error);
       localStorage.removeItem('token');
+      return false;
+    }
+  }
+
+  /**
+   * simple function that checks if the userId matches the userId of the resource
+   * or if the user is an admin, this is used to check if the user can delete a post or comment
+   * @param resourceUserId the userId of the resource (can be a comment or post)
+   * @returns a boolean if user is owner or admin or not
+   */
+  public isOwnerOrAdmin(resourceUserId: number): boolean {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      return false;
+    }
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+
+      return Number(payload.userId) === resourceUserId || payload.role === 'ADMIN';
+    } catch {
       return false;
     }
   }

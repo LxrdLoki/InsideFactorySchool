@@ -12,6 +12,16 @@ body{
   background: url(../../public/void.gif) #ccd3d8 repeat 0 0;
 }
 
+.error{
+  color: red;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.required {
+  color: red;
+}
+
 // no bootstrap needed 😎
 .container {
   @include m.main-margin(0px);
@@ -49,6 +59,12 @@ body{
     }
 }
 
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched,
+select.ng-invalid.ng-touched {
+  border: 1px solid #ff6b6b;
+}
+
 .button{
   background-color: v.$secondary-color;
   border: none;
@@ -61,5 +77,10 @@ body{
   &:hover{
     cursor: pointer;
     background-color: v.$primary-color;
+  }
+
+  &:disabled{
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 }

@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { AuthenticatedUser } from "../types/context";
 
 export async function authMiddleware(c: any, next: any) {
 
@@ -13,7 +14,7 @@ export async function authMiddleware(c: any, next: any) {
 
   // verify the token, if invalid return 401 unauthorized
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as AuthenticatedUser;
     c.set("user", decoded);
     await next();
   } catch {

@@ -1,0 +1,103 @@
+<div class="suggestion-header">
+  <div class="overlay"></div>
+
+  <div class="header-content">
+    <h1>Create New Post</h1>
+  </div>
+</div>
+
+<div class="create-suggestion">
+
+  <form [formGroup]="forumForm" (ngSubmit)="createPost($event)" class="form-holder">
+    <h3>New Forum Post</h3>
+
+    @if(postError) {
+      <span class="error">{{ postError }}</span>
+    }
+
+    <label for="title">
+      Title <span class="required">*</span>
+    </label>
+
+    <input
+      id="title"
+      type="text"
+      formControlName="title"
+      placeholder="Title"
+      maxlength="40"
+    />
+
+    @if(forumForm.get('title')?.touched &&
+        forumForm.get('title')?.hasError('required')) {
+      <span class="error">
+        Title is required
+      </span>
+    }
+
+    @if(forumForm.get('title')?.touched &&
+        forumForm.get('title')?.hasError('minlength')) {
+      <span class="error">
+        Title must be at least 6 characters long
+      </span>
+    }
+
+    <label for="subject">
+      Category <span class="required">*</span>
+    </label>
+
+    <select id="subject" formControlName="subject">
+      <option value="" disabled>Select category</option>
+      <option value="FOREX">Forex</option>
+      <option value="STOCKS">Stocks</option>
+      <option value="BUGS">Bugs</option>
+      <option value="OFFTOPIC">Off topic</option>
+    </select>
+
+    @if(forumForm.get('subject')?.touched &&
+        forumForm.get('subject')?.hasError('required')) {
+      <span class="error">
+        Please select a category
+      </span>
+    }
+
+    <label for="text">
+      Content <span class="required">*</span>
+    </label>
+
+    <textarea
+      id="text"
+      formControlName="text"
+      placeholder="Description"
+      maxlength="4000"
+    ></textarea>
+
+    @if(forumForm.get('text')?.touched &&
+        forumForm.get('text')?.hasError('required')) {
+      <span class="error">
+        Content is required
+      </span>
+    }
+
+    @if(forumForm.get('text')?.touched &&
+        forumForm.get('text')?.hasError('minlength')) {
+      <span class="error">
+        Content must be at least 20 characters long
+      </span>
+    }
+
+    @if(forumForm.get('text')?.touched &&
+        forumForm.get('text')?.hasError('maxlength')) {
+      <span class="error">
+        Content cannot exceed 2000 characters
+      </span>
+    }
+
+    <button
+      class="button"
+      type="submit"
+      [disabled]="forumForm.invalid"
+    >
+      Create Post
+    </button>
+  </form>
+</div>

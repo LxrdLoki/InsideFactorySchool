@@ -25,4 +25,54 @@ export class ApiService {
   public registerUser(username: string, email: string, password: string): Observable<User> {
     return this.http.post<User>(`http://localhost:3000/register`, { username, email, password });
   }
+
+  public createPost(title: string, subject: string, text: string): Observable<any> {
+    const token = localStorage.getItem("token");
+    return this.http.post(`http://localhost:3000/forum/createPost`, { title, subject, text }, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
+  public getForumPosts(category: string): Observable<any> {
+    return this.http.get(`http://localhost:3000/forum/${category.toUpperCase()}`);
+  }
+
+  public getSinglePost(id: string): Observable<any> {
+    return this.http.get(`http://localhost:3000/forum/posts/${id}`);
+  }
+
+  public deletePost(postId: number): Observable<any> {
+    const token = localStorage.getItem("token");
+    return this.http.delete(`http://localhost:3000/forum/posts/${postId}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
+  public createComment(postId: number, text: string): Observable<any> {
+    const token = localStorage.getItem("token");
+    return this.http.post(`http://localhost:3000/forum/posts/${postId}/comments`, { text }, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
+  public deleteComment(commentId: number): Observable<any> {
+    const token = localStorage.getItem("token");
+    return this.http.delete(`http://localhost:3000/forum/comments/${commentId}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
+  public upvotePost(postId: number): Observable<any> {
+    const token = localStorage.getItem("token");
+    return this.http.post(`http://localhost:3000/forum/posts/${postId}/upvote`, {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
+  public downvotePost(postId: number): Observable<any> {
+    const token = localStorage.getItem("token");
+    return this.http.post(`http://localhost:3000/forum/posts/${postId}/downvote`, {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
 }

@@ -1,14 +1,14 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiService } from '../../services/api.service';
+import { ApiService } from '../../../services/api.service';
 
 @Component({
-  selector: 'app-forum-page',
+  selector: 'app-new-forum-post',
   imports: [ReactiveFormsModule],
-  templateUrl: './forum-page.html',
-  styleUrl: './forum-page.scss',
+  templateUrl: './new-forum-post.html',
+  styleUrl: './new-forum-post.scss',
 })
-export class ForumPage implements OnInit {
+export class NewForumPost implements OnInit {
   private formBuilder = inject(FormBuilder);
   public postError: string | null = null;
 
@@ -17,10 +17,18 @@ export class ForumPage implements OnInit {
   public forumForm = this.formBuilder.group({
     title: ['', [Validators.required, Validators.minLength(6)]],
     subject: ['', [Validators.required]],
-    text: ['', [Validators.required, Validators.minLength(20), Validators.maxLength(2000)]],
+    text: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(20),
+        Validators.maxLength(2000)
+      ]
+    ],
   });
 
   ngOnInit(): void {
+    // clear backend errors while typing
     this.forumForm.valueChanges.subscribe(() => {
       this.postError = null;
     });
@@ -37,12 +45,13 @@ export class ForumPage implements OnInit {
     const { title, subject, text } = this.forumForm.value;
 
     this.apiService.createPost(title!, subject!, text!).subscribe({
-      next: (response) => {
-        window.location.href = '/';
+      next: () => {
+        window.location.href = '/forum';
       },
+
       error: (err) => {
-        this.postError = err.error.error;
         console.error('Error creating post -> ', err.error.error);
+        this.postError = err.error.error;
       }
     });
   }

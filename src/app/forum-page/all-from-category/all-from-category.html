@@ -1,0 +1,76 @@
+<div class="forum-header">
+  <div class="overlay"></div>
+
+  <div class="header-content">
+    <h1>{{ category }} Discussions</h1>
+
+    <a routerLink="/forum/create/new-post" class="create-btn">
+      + Create Post
+    </a>
+  </div>
+</div>
+
+<div class="forum-container">
+
+  @if(posts()?.length) {
+
+    @for(post of posts(); track post.id) {
+      <div class="post-card">
+        <div class="post-title-row">
+          <h2 class="title">
+            {{ post.title }}
+            <span class="tag">
+              #{{ post.id }}
+            </span>
+          </h2>
+        </div>
+
+        <div class="post-content">
+
+          <div class="post-text">
+            {{ post.text }}
+          </div>
+
+          <div class="votes">
+            <button class="vote-btn" (click)="onUpvote(post.id)">⬆</button>
+
+            <span class="vote-count">
+              {{ post.upvotes - post.downvotes }}
+            </span>
+
+            <button class="vote-btn" (click)="onDownvote(post.id)">⬇</button>
+          </div>
+
+        </div>
+
+        <div class="post-footer">
+
+          <div class="creator">
+            By
+            <span class="username">
+              {{ post.user.username }}
+            </span>
+          </div>
+
+          <a
+            [routerLink]="['/forum/post', post.id]"
+            class="view-post-btn"
+          >
+            View Post
+          </a>
+
+        </div>
+
+      </div>
+
+    }
+
+  } @else {
+
+    <div class="empty-state">
+      No posts found.
+    </div>
+
+  }
+
+</div>

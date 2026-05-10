@@ -7,22 +7,22 @@ datasource db {
   provider = "mysql"
 }
 
-model InsiderTransaction {
-  id        Int     @id @default(autoincrement())
-  ticker    String  @unique
+model insiderTransaction {
+  id     Int    @id @default(autoincrement())
+  ticker String @unique
 
-  transactionDate String
+  transactionDate   String
   lastTransactionId String
 
-  netValue   Float   @default(0)
-  netShares  Float   @default(0)
+  netValue  Float @default(0)
+  netShares Float @default(0)
 
   trackingSince DateTime
   lastUpdated   DateTime
 }
 
-model allInsiderTransactions{
-  id        String  @id
+model allInsiderTransactions {
+  id        String   @id
   ticker    String
   type      String
   shares    Float
@@ -31,15 +31,69 @@ model allInsiderTransactions{
   createdAt DateTime @default(now())
 }
 
-enum UserRole{
+enum UserRole {
   USER
   ADMIN
-} 
+}
+
+enum ForumCategory {
+  FOREX
+  STOCKS
+  BUGS
+  OFFTOPIC
+}
 
 model User {
-  id        Int     @id @default(autoincrement())
-  username  String  @unique
-  email     String  @unique
-  password  String
-  role      UserRole @default(USER)
+  id             Int             @id @default(autoincrement())
+  username       String          @unique
+  email          String          @unique
+  password       String
+  role           UserRole        @default(USER)
+  forumPosts     ForumPost[]
+  forumComments  ForumComment[]
+  forumPostVotes ForumPostVote[]
+}
+
+model ForumPost {
+  id Int @id @default(autoincrement())
+
+  title   String
+  text    String        @db.Text
+  subject ForumCategory
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade, map: "ForumPost_userId_fkey")
+
+  comments ForumComment[]
+
+  upvotes   Int @default(0)
+  downvotes Int @default(0)
+
+  createdAt      DateTime        @default(now())
+  forumPostVotes ForumPostVote[]
+}
+
+model ForumPostVote {
+  id Int @id @default(autoincrement())
+  value Int
+  userId Int
+  postId Int
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  forumPost ForumPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  @@unique([userId, postId])
+}
+
+model ForumComment {
+  id Int @id @default(autoincrement())
+
+  text String @db.Text
+
+  postId Int
+  post   ForumPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
 }

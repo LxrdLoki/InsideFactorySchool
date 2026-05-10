@@ -44,5 +44,7 @@ export async function scrapeOpenInsider() {
     });
   });
 
+  
+
   return events;
 }
