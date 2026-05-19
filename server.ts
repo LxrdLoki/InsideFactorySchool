@@ -102,17 +102,7 @@ app.get('/forum/:category', async (c) => {
 
   const category = c.req.param('category');
 
-  const posts = await prisma.forumPost.findMany({
-    where: {
-      subject: category as ForumCategory
-    },
-    include: {
-      user: true
-    },
-    orderBy: {
-      createdAt: 'desc'
-    }
-  });
+  const posts = await getPosts(prisma, category)
 
   return c.json(posts);
 });
