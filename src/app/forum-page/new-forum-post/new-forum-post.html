@@ -11,8 +11,8 @@
   <form [formGroup]="forumForm" (ngSubmit)="createPost($event)" class="form-holder">
     <h3>New Forum Post</h3>
 
-    @if(postError) {
-      <span class="error">{{ postError }}</span>
+    @if(postError()) {
+      <span class="error">{{ postError() }}</span>
     }
 
     <label for="title">
