@@ -37,8 +37,8 @@ app.use('*', cors());
 
 // this will be 5 attempts per 15 minutes for all auth routes (register and login) to prevent brute force attacks
 const authRateLimiter = createRateLimiter(5, 15 * 60 * 1000);
-// the general rate limiter (used on all post requests) allows max 100 requests per minute (10 per second) to prevent DoS attacks
-const generalRateLimiter = createRateLimiter(1, 1 * 60 * 1000);
+// the general rate limiter (used on all post requests) allows max 600 requests per minute (10 per second) to prevent DoS attacks
+const generalRateLimiter = createRateLimiter(600, 1 * 60 * 1000);
 
 app.get('/calendar/:week', async (c) => {
   const weekNumber = Number(c.req.param('week'));
