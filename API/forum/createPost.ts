@@ -1,5 +1,12 @@
+import { sanitizeString } from "../helpers/scrapeDataValidator";
+
 export async function createPost(body: any, prisma: any, userId: number) {
-  const { title, text, subject } = body;
+  const { rawTitle, rawText, subject } = body;
+
+  // sanitize user input to prevent storing XSS attacks in database
+  const title = sanitizeString(rawTitle);
+  const text = sanitizeString(rawText)
+
 
   if (!title || !text || !subject) {
     return { error: "Missing required fields" };
