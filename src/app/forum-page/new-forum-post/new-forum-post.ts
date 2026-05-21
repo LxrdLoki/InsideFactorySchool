@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../../services/api.service';
 
@@ -7,10 +7,11 @@ import { ApiService } from '../../../services/api.service';
   imports: [ReactiveFormsModule],
   templateUrl: './new-forum-post.html',
   styleUrl: './new-forum-post.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewForumPost implements OnInit {
   private formBuilder = inject(FormBuilder);
-  public postError: string | null = null;
+  public postError = signal<string | null>(null);
 
   constructor(public apiService: ApiService) { }
 
@@ -30,7 +31,7 @@ export class NewForumPost implements OnInit {
   ngOnInit(): void {
     // clear backend errors while typing
     this.forumForm.valueChanges.subscribe(() => {
-      this.postError = null;
+      this.postError.set(null);
     });
   }
 
@@ -51,7 +52,7 @@ export class NewForumPost implements OnInit {
 
       error: (err) => {
         console.error('Error creating post -> ', err.error.error);
-        this.postError = err.error.error;
+        this.postError.set(err.error.error);
       }
     });
   }

@@ -48,8 +48,8 @@
       </div>
 
     </div>
-    @if(registerError) {
-      <span class="error">{{ registerError }}</span>
+    @if(registerError()) {
+      <span class="error">{{ registerError() }}</span>
     }
     <button type="submit" class="button" [disabled]="registerForm.invalid">Create account</button>
     <span class="noAccountButton">Already part of the community? <a href="/login">Login here!</a></span>

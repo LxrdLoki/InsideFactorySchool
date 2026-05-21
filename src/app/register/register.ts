@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { matchPasswords } from '../regex/matchPasswords';
@@ -8,9 +8,10 @@ import { matchPasswords } from '../regex/matchPasswords';
   imports: [ReactiveFormsModule],
   templateUrl: './register.html',
   styleUrl: './register.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Register implements OnInit {
-  public registerError: string | null = null;
+  public registerError = signal<string | null>(null);
   private formBuilder = inject(FormBuilder);
 
   constructor(public apiService: ApiService) { }
@@ -31,7 +32,7 @@ export class Register implements OnInit {
 
   ngOnInit() {
     this.registerForm.valueChanges.subscribe(() => {
-      this.registerError = null;
+      this.registerError.set(null);
     });
   }
 
@@ -51,11 +52,12 @@ export class Register implements OnInit {
       },
       error: (err) => {
         console.error('Error registering user -> ', err.error.error);
-        this.registerError = err.error.error;
+        const errorMsg = err.error.error;
+        this.registerError.set(errorMsg);
 
-        if (this.registerError!.includes("Username")) {
+        if (errorMsg.includes("Username")) {
           this.registerForm.get('username')?.setErrors({ usernameTaken: true });
-        } else if (this.registerError!.includes("Email")) {
+        } else if (errorMsg.includes("Email")) {
           this.registerForm.get('email')?.setErrors({ emailTaken: true });
         }
       }

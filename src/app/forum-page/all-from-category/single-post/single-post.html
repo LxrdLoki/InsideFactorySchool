@@ -41,6 +41,9 @@
 
   <div class="comment-create">
     <h2>Add a comment</h2>
+    @if(commentError()) {
+      <span class="error">{{ commentError() }}</span>
+    }
     <form (submit)="createComment($event, commentText.value)">
       <textarea
         #commentText

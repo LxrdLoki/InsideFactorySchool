@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
@@ -7,9 +7,10 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
   imports: [ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Login implements OnInit {
-  public loginError: string | null = null;
+  public loginError = signal<string | null>(null);
 
   private formBuilder = inject(FormBuilder);
 
@@ -23,7 +24,7 @@ export class Login implements OnInit {
 
   ngOnInit() {
     this.loginForm.valueChanges.subscribe(() => {
-      this.loginError = null;
+      this.loginError.set(null);
     });
   }
 
@@ -46,7 +47,7 @@ export class Login implements OnInit {
       },
       error: (err) => {
         console.error('Error logging in user -> ', err.error.error);
-        this.loginError = err.error.error || 'Invalid email or password';
+        this.loginError.set(err.error.error || 'Invalid email or password');
       }
     });
   }

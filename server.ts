@@ -37,6 +37,8 @@ app.use('*', cors());
 
 // this will be 5 attempts per 15 minutes for all auth routes (register and login) to prevent brute force attacks
 const authRateLimiter = createRateLimiter(5, 15 * 60 * 1000);
+// the general rate limiter (used on all post requests) allows max 600 requests per minute (10 per second) to prevent DoS attacks
+const generalRateLimiter = createRateLimiter(600, 1 * 60 * 1000);
 
 app.get('/calendar/:week', async (c) => {
   const weekNumber = Number(c.req.param('week'));
@@ -84,7 +86,7 @@ app.post('/login', authRateLimiter, async (c) => {
   return c.json(result);
 });
 
-app.post("/forum/createPost", authMiddleware, requireRole("USER"), async (c) => {
+app.post("/forum/createPost", generalRateLimiter, authMiddleware, requireRole("USER"), async (c) => {
   const body = await c.req.json();
 
   const user = getAuthenticatedUser(c);
@@ -102,17 +104,7 @@ app.get('/forum/:category', async (c) => {
 
   const category = c.req.param('category');
 
-  const posts = await prisma.forumPost.findMany({
-    where: {
-      subject: category as ForumCategory
-    },
-    include: {
-      user: true
-    },
-    orderBy: {
-      createdAt: 'desc'
-    }
-  });
+  const posts = await getPosts(prisma, category)
 
   return c.json(posts);
 });
@@ -130,7 +122,7 @@ app.get("/forum/posts/:id", async (c) => {
   return c.json(post);
 });
 
-app.post("/forum/posts/:id/comments", authMiddleware, requireRole("USER"), async (c) => {
+app.post("/forum/posts/:id/comments", generalRateLimiter, authMiddleware, requireRole("USER"), async (c) => {
 
   const body = await c.req.json();
 
@@ -189,7 +181,7 @@ app.delete("/forum/comments/:id", authMiddleware, requireRole("USER"), async (c)
   return c.json(result);
 });
 
-app.post("/forum/posts/:id/upvote", authMiddleware, requireRole("USER"), async (c) => {
+app.post("/forum/posts/:id/upvote", generalRateLimiter, authMiddleware, requireRole("USER"), async (c) => {
 
   const postId = Number(c.req.param("id"));
   const user = getAuthenticatedUser(c);
@@ -207,7 +199,7 @@ app.post("/forum/posts/:id/upvote", authMiddleware, requireRole("USER"), async (
   return c.json(result);
 });
 
-app.post("/forum/posts/:id/downvote", authMiddleware, requireRole("USER"), async (c) => {
+app.post("/forum/posts/:id/downvote", generalRateLimiter, authMiddleware, requireRole("USER"), async (c) => {
 
   const postId = Number(c.req.param("id"));
   const user = getAuthenticatedUser(c);

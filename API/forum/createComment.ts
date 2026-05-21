@@ -1,3 +1,5 @@
+import { sanitizeString } from "../helpers/scrapeDataValidator";
+
 export async function createComment(
   body: any,
   prisma: any,
@@ -5,7 +7,8 @@ export async function createComment(
   postId: number
 ) {
 
-  const { text } = body;
+  const { rawText } = body;
+  const text = sanitizeString(rawText);
 
   if (!text) {
     return { error: "Comment cannot be empty" };
