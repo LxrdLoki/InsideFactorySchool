@@ -44,21 +44,6 @@ To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use th
 ng test
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-
-
 # API
 
 This project uses Hono.js for the backend. 
@@ -69,13 +54,15 @@ Before starting make sure to:
 1. fill in the entries of .env.example and change the name to just .env
 2. generate a prisma client by running:
 ```bash
-npx prisma db pull
+npx prisma db push
 npx prisma generate
 ```
 After that open another terminal tab and run 
 ```bash
 npx tsx server.ts
 ```
+
+NOTE: on first startup, if insider trades are not showing go to following URL: [http](http://localhost:3000/insiderTrades)
 
 Security metigations:
 T5 (threat 5) -> Malicious Scraped Data Injection
