@@ -1,0 +1,78 @@
+# .github/workflows/tests.yml
+
+name: Angular + Cypress Tests
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20]
+
+    services:
+      mariadb:
+        image: mariadb:11
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: insidefactoryschool
+          MYSQL_USER: testuser
+          MYSQL_PASSWORD: testpassword
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mariadb-admin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      DATABASE_HOST: 127.0.0.1
+      DATABASE_PORT: 3306
+      DATABASE_USER: testuser
+      DATABASE_PASSWORD: testpassword
+      DATABASE_NAME: insidefactoryschool
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Run Prisma migrations
+        run: npx prisma migrate deploy
+
+      - name: Seed test users
+        run: npx tsx seed-test-users.ts
+
+      - name: Run Angular unit tests
+        run: ng test --watch=false --browsers=ChromeHeadless
+
+      - name: Start application
+        run: npm start &
+      
+      - name: Wait for app to start
+        run: npx wait-on http://localhost:4200
+
+      - name: Run Cypress tests
+        run: npm run cypress:run
