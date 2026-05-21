@@ -7,16 +7,16 @@ export async function createComment(
   postId: number
 ) {
 
-  const { rawText } = body;
-  const text = sanitizeString(rawText);
+  const { text } = body;
+  const sanitizedText = sanitizeString(text);
 
-  if (!text) {
+  if (!sanitizedText) {
     return { error: "Comment cannot be empty" };
   }
 
   const comment = await prisma.forumComment.create({
     data: {
-      text,
+      text: sanitizedText,
       userId,
       postId
     },

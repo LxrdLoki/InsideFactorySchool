@@ -46,3 +46,6 @@ __screenshots__/
 Thumbs.db
 
 /prisma/generated/prisma
+
+# screenshots from cypres test
+/cypress/screenshots

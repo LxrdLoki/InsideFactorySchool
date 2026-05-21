@@ -4,7 +4,7 @@ import { parseFloats } from "./parseFloats";
 
 // replace < and > with empty string to prevent XSS attacks
 export function sanitizeString(input: string): string {
-  return input.replace(/[<>]/g, '');
+  return String(input ?? '').replace(/[<>]/g, '');
 }
 
 // validating the transactiondata to ensure it has a correct value
