@@ -9,7 +9,7 @@ export async function getPost(prisma: any, postId: number) {
       user: {
         select: {
           username: true,
-          role: true
+          role: true,
         }
       },
 

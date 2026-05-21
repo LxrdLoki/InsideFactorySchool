@@ -20,7 +20,6 @@ export async function processTransactions(prisma: any) {
     });
 
     if (exists) {
-      console.log(transaction.id, "transaction already exists")
       continue;
     }
 
@@ -42,7 +41,6 @@ export async function processTransactions(prisma: any) {
     });
 
     if (flow?.lastTransactionId === transaction.id) {
-      console.log(transaction.id, "transaction already processed")
       continue;
     }
 

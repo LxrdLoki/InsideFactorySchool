@@ -1,15 +1,22 @@
+import { sanitizeString } from "../helpers/scrapeDataValidator";
+
 export async function createPost(body: any, prisma: any, userId: number) {
   const { title, text, subject } = body;
 
-  if (!title || !text || !subject) {
+  // sanitize user input to prevent storing XSS attacks in database
+  const sanitizedTitle = sanitizeString(title);
+  const sanitizedText = sanitizeString(text)
+
+
+  if (!sanitizedTitle || !sanitizedText || !subject) {
     return { error: "Missing required fields" };
   }
 
-  if (title.length > 100) {
+  if (sanitizedTitle.length > 100) {
     return { error: "Title too long" };
   }
 
-  if (text.length > 5000) {
+  if (sanitizedText.length > 5000) {
     return { error: "Post too long" };
   }
 
@@ -18,8 +25,8 @@ export async function createPost(body: any, prisma: any, userId: number) {
   try {
     const post = await prisma.forumPost.create({
       data: {
-        title,
-        text,
+        title: sanitizedTitle,
+        text: sanitizedText,
         subject,
         userId
       },

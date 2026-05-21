@@ -1,3 +1,5 @@
+import { sanitizeString } from "../helpers/scrapeDataValidator";
+
 export async function createComment(
   body: any,
   prisma: any,
@@ -6,14 +8,15 @@ export async function createComment(
 ) {
 
   const { text } = body;
+  const sanitizedText = sanitizeString(text);
 
-  if (!text) {
+  if (!sanitizedText) {
     return { error: "Comment cannot be empty" };
   }
 
   const comment = await prisma.forumComment.create({
     data: {
-      text,
+      text: sanitizedText,
       userId,
       postId
     },

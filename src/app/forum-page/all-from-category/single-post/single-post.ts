@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ApiService } from '../../../../services/api.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
@@ -10,10 +10,12 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [CommonModule, RouterLink],
   templateUrl: './single-post.html',
   styleUrl: './single-post.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SinglePost implements OnInit {
   public postId: string = '';
   public post = signal<any | undefined>(undefined);
+  public commentError = signal<string | null>(null);
 
   constructor(private apiService: ApiService, private route: ActivatedRoute, public authService: AuthService) { }
 
@@ -33,10 +35,12 @@ export class SinglePost implements OnInit {
 
   public createComment(event: Event, text: string) {
     event.preventDefault();
+    this.commentError.set(null);
 
     this.apiService.createComment(Number(this.postId), text).subscribe({
       next: (response) => {
         console.log('Comment created -> ', response);
+        (event.target as HTMLFormElement).reset();
 
         // refresh post to get the new comment
         this.apiService.getSinglePost(this.postId).subscribe((updatedPost) => {
@@ -45,6 +49,7 @@ export class SinglePost implements OnInit {
       },
       error: (err) => {
         console.error('Error creating comment -> ', err);
+        this.commentError.set(err.error.error || 'Failed to create comment');
       }
     });
   }
